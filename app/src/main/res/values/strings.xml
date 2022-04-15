@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Pricey</string>
+
+    <!-- List page -->
+    <string name="product_image">Product image</string>
+
+    <!-- Comparison page -->
+
+    <!-- Basket page -->
 </resources>

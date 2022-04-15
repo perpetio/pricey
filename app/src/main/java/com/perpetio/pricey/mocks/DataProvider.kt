@@ -1,5 +1,6 @@
 package com.perpetio.pricey.mocks
 
+import com.perpetio.pricey.R
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductHeader
 import com.perpetio.pricey.models.Shop
@@ -12,12 +13,12 @@ object DataProvider {
     )
 
     val productsHeaders = listOf(
-        ProductHeader("Гречка", "", ""),
-        ProductHeader("Macло", "", ""),
-        ProductHeader("Сир", "", ""),
-        ProductHeader("Вареники", "", ""),
-        ProductHeader("Молоко", "", ""),
-        ProductHeader("Печиво", "", ""),
+        ProductHeader("Гречка", R.drawable.ic_launcher_background, ""),
+        ProductHeader("Macло", R.drawable.ic_launcher_background, ""),
+        ProductHeader("Сир", R.drawable.ic_launcher_background, ""),
+        ProductHeader("Вареники", R.drawable.ic_launcher_background, ""),
+        ProductHeader("Молоко", R.drawable.ic_launcher_background, ""),
+        ProductHeader("Печиво", R.drawable.ic_launcher_background, ""),
     )
 
     val products = listOf(
