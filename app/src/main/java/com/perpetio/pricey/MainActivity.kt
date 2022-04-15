@@ -15,12 +15,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.mocks.DataProvider
-import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductHeader
 import com.perpetio.pricey.ui.theme.PriceyTheme
+import com.perpetio.pricey.ui.theme.plate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun PageUi() {
-    Scaffold (
+    Scaffold(
         content = {
             ListOfProducts()
         }
@@ -49,7 +49,7 @@ fun ListOfProducts() {
         DataProvider.productsHeaders
     }
     LazyColumn(
-        contentPadding = PaddingValues(dimensionResource(R.dimen.plate_padding))
+        contentPadding = PaddingValues(plate.padding.dp)
     ) {
         items(
             items = products,
@@ -64,14 +64,14 @@ fun ListOfProducts() {
 fun ProductItem(productHeader: ProductHeader) {
     Card(
         modifier = Modifier
-            .padding(bottom = dimensionResource(R.dimen.plate_padding))
+            .padding(bottom = plate.padding.dp)
             .fillMaxWidth(),
-        elevation = dimensionResource(R.dimen.plate_elevation),
-        shape = RoundedCornerShape(dimensionResource(R.dimen.plate_corners))
+        elevation = plate.elevation.dp,
+        shape = RoundedCornerShape(plate.corners.dp)
     ) {
         Text(
             text = productHeader.name,
-            modifier = Modifier.padding(dimensionResource(R.dimen.plate_padding))
+            modifier = Modifier.padding(plate.padding.dp)
         )
     }
 }
