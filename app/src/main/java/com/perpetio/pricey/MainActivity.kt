@@ -9,31 +9,40 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.perpetio.pricey.AppPages.ComparisonPage
-import com.perpetio.pricey.AppPages.ListPage
+import com.perpetio.pricey.AppPages.*
 import com.perpetio.pricey.mocks.DataProvider
+import com.perpetio.pricey.ui.pages.BasketPage
 import com.perpetio.pricey.ui.pages.ComparisonPage
 import com.perpetio.pricey.ui.pages.ListPage
 import com.perpetio.pricey.ui.theme.PriceyTheme
+import com.perpetio.pricey.view_models.BasketViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PriceyTheme {
-                InitNavigation()
+                SetupPages()
             }
         }
     }
 }
 
 @Composable
-fun InitNavigation() {
+fun SetupPages(
+    basketViewModel: BasketViewModel = BasketViewModel()
+) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = ListPage.name) {
-        composable(ListPage.name) {
+    NavHost(
+        navController = navController,
+        startDestination = ListPage.name
+    ) {
+        composable(
+            route = ListPage.name
+        ) {
             ListPage(
-                onProductClick = { productName ->
+                DataProvider.productsHeaders,
+                onProductSelect = { productName ->
                     navController.navigate("${ComparisonPage.name}/$productName")
                 }
             )
@@ -47,9 +56,26 @@ fun InitNavigation() {
             )
         ) { entry ->
             entry.arguments?.getString("product_name")?.let { productName ->
-                val product = DataProvider.getProducts(productName)
-                ComparisonPage(product)
+                ComparisonPage(
+                    products = DataProvider.getProducts(productName),
+                    onAddToBasket = { product ->
+                        basketViewModel.addToBasket(product)
+                    }
+                )
             }
+        }
+        composable(
+            route = BasketPage.name
+        ) {
+            BasketPage(
+                products = basketViewModel.products,
+                onProductRemove = { productName, shopName ->
+                    basketViewModel.removeFromBasket(productName, shopName)
+                },
+                onGoBack = {
+                    navController.navigate(ListPage.name)
+                }
+            )
         }
     }
 }

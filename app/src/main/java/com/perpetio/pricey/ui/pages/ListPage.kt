@@ -1,10 +1,12 @@
 package com.perpetio.pricey.ui.pages
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -14,24 +16,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.models.ProductHeader
 import com.perpetio.pricey.ui.theme.plate
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListPage(
     products: List<ProductHeader>,
-    onProductClick: (String) -> Unit = {},
+    onProductSelect: (String) -> Unit,
 ) {
     val items = remember { products }
-    LazyColumn(
-        contentPadding = PaddingValues(plate.padding.dp)
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(3),
+        contentPadding = PaddingValues(
+            start = plate.padding.dp,
+            top = plate.padding.dp
+        )
     ) {
         items(
             items = items,
             itemContent = { product ->
                 ProductItem(
                     product = product,
-                    onClick = onProductClick
+                    onSelect = onProductSelect
                 )
             }
         )
@@ -42,7 +50,7 @@ fun ListPage(
 @Composable
 private fun Preview() {
     ListPage(
-        listOf(),
+        DataProvider.productsHeaders,
         {}
     )
 }
@@ -50,12 +58,15 @@ private fun Preview() {
 @Composable
 private fun ProductItem(
     product: ProductHeader,
-    onClick: (String) -> Unit = {}
+    onSelect: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
-            .padding(bottom = plate.padding.dp)
-            .clickable { onClick(product.name) }
+            .padding(
+                end = plate.padding.dp,
+                bottom = plate.padding.dp
+            )
+            .clickable { onSelect(product.name) }
             .fillMaxWidth(),
         elevation = plate.elevation.dp,
         shape = RoundedCornerShape(plate.corners.dp)
