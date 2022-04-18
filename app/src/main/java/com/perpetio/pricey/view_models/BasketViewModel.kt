@@ -7,18 +7,19 @@ import com.perpetio.pricey.models.Product
 class BasketViewModel : ViewModel() {
     var products = mutableStateListOf<Product>()
 
-    fun addToBasket(product: Product) {
-        products.add(product)
-    }
-    fun removeFromBasket(
-        productName: String,
-        shopName: String
-    ) {
-        products.find { product ->
-            product.header.name == productName
-                && product.shop.name == shopName
-        }?.let { targetProduct ->
-            products.remove(targetProduct)
+    fun addToBasket(newProducts: List<Product>) {
+        newProducts.forEach { newProduct ->
+            val foundProduct = products.find { oldProduct ->
+                newProduct.header.name == oldProduct.header.name
+                        && newProduct.shop.name == oldProduct.shop.name
+            }
+            if (foundProduct == null) {
+                products.add(newProduct)
+            }
         }
+    }
+
+    fun removeFromBasket(product: Product) {
+        products.remove(product)
     }
 }

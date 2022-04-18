@@ -21,7 +21,7 @@ import com.perpetio.pricey.ui.theme.plate
 @Composable
 fun BasketPage(
     products: List<Product>,
-    onProductRemove: (String, String) -> Unit,
+    onProductRemove: (Product) -> Unit,
     onGoBack: () -> Unit
 ) {
     val items = remember { products }
@@ -54,7 +54,7 @@ fun BasketPage(
 private fun Preview() {
     BasketPage(
         emptyList(),
-        { _, _ -> },
+        {},
         {}
     )
 }
@@ -62,7 +62,7 @@ private fun Preview() {
 @Composable
 private fun ProductItem(
     product: Product,
-    onRemove: (String, String) -> Unit
+    onRemove: (Product) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -71,7 +71,7 @@ private fun ProductItem(
                 bottom = plate.padding.dp
             )
             .clickable {
-                onRemove(product.header.name, product.shop.name)
+                onRemove(product)
             }
             .fillMaxWidth(),
         elevation = plate.elevation.dp,

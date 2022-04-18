@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.perpetio.pricey.AppPages.*
 import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.ui.pages.BasketPage
@@ -41,7 +42,7 @@ fun SetupPages(
             route = ListPage.name
         ) {
             ListPage(
-                DataProvider.productsHeaders,
+                products = DataProvider.productsHeaders,
                 onProductSelect = { productName ->
                     navController.navigate("${ComparisonPage.name}/$productName")
                 }
@@ -60,6 +61,9 @@ fun SetupPages(
                     products = DataProvider.getProducts(productName),
                     onAddToBasket = { product ->
                         basketViewModel.addToBasket(product)
+                    },
+                    goToBasket = {
+                        navController.navigate(BasketPage.name)
                     }
                 )
             }
@@ -69,8 +73,8 @@ fun SetupPages(
         ) {
             BasketPage(
                 products = basketViewModel.products,
-                onProductRemove = { productName, shopName ->
-                    basketViewModel.removeFromBasket(productName, shopName)
+                onProductRemove = { product ->
+                    basketViewModel.removeFromBasket(product)
                 },
                 onGoBack = {
                     navController.navigate(ListPage.name)
