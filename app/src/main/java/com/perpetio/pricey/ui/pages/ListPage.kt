@@ -14,25 +14,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.models.ProductHeader
 import com.perpetio.pricey.ui.theme.plate
 
 @Composable
 fun ListPage(
+    products: List<ProductHeader>,
     onProductClick: (String) -> Unit = {},
 ) {
-    val products = remember {
-        DataProvider.productsHeaders
-    }
+    val items = remember { products }
     LazyColumn(
         contentPadding = PaddingValues(plate.padding.dp)
     ) {
         items(
-            items = products,
-            itemContent = { productHeader ->
+            items = items,
+            itemContent = { product ->
                 ProductItem(
-                    productHeader = productHeader,
+                    product = product,
                     onClick = onProductClick
                 )
             }
@@ -44,25 +42,26 @@ fun ListPage(
 @Composable
 private fun Preview() {
     ListPage(
+        listOf(),
         {}
     )
 }
 
 @Composable
 private fun ProductItem(
-    productHeader: ProductHeader,
+    product: ProductHeader,
     onClick: (String) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .padding(bottom = plate.padding.dp)
-            .clickable { onClick(productHeader.name) }
+            .clickable { onClick(product.name) }
             .fillMaxWidth(),
         elevation = plate.elevation.dp,
         shape = RoundedCornerShape(plate.corners.dp)
     ) {
         Text(
-            text = productHeader.name,
+            text = product.name,
             modifier = Modifier.padding(plate.padding.dp)
         )
     }
