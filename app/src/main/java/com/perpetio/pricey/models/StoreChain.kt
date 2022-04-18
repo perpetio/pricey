@@ -1,7 +1,6 @@
 package com.perpetio.pricey.models
 
-data class ProductHeader(
+data class StoreChain(
     val name: String,
     val imageResId: Int,
-    val amountUnit: String
 )

@@ -10,8 +10,8 @@ class BasketViewModel : ViewModel() {
     fun addToBasket(newProducts: List<Product>) {
         newProducts.forEach { newProduct ->
             val foundProduct = products.find { oldProduct ->
-                newProduct.header.name == oldProduct.header.name
-                        && newProduct.shop.name == oldProduct.shop.name
+                newProduct.article.name == oldProduct.article.name
+                        && newProduct.store.name == oldProduct.store.name
             }
             if (foundProduct == null) {
                 products.add(newProduct)

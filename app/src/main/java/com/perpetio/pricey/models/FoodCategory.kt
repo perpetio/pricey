@@ -1,6 +1,6 @@
 package com.perpetio.pricey.models
 
-data class Shop(
+data class FoodCategory(
     val name: String,
-    val image: String
+    val imageResId: Int
 )

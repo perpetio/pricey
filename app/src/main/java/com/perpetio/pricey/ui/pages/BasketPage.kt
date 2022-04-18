@@ -78,7 +78,7 @@ private fun ProductItem(
         shape = RoundedCornerShape(plate.corners.dp)
     ) {
         Text(
-            text = product.header.name,
+            text = product.article.name,
             modifier = Modifier.padding(plate.padding.dp)
         )
     }

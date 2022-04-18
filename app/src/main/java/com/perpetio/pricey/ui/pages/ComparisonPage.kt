@@ -31,7 +31,7 @@ fun ComparisonPage(
     goToBasket: () -> Unit
 ) {
 
-    val productHeader = products[0].header
+    val productHeader = products[0].article
     val selectedProducts = remember {
         mutableStateListOf<Product>()
     }
@@ -126,7 +126,7 @@ private fun ProductItem(
         backgroundColor = if(isSelected) Color.DarkGray else MaterialTheme.colors.surface
     ) {
         Text(
-            text = product.header.name,
+            text = product.article.name,
             modifier = Modifier.padding(plate.padding.dp)
         )
     }

@@ -17,13 +17,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.mocks.DataProvider
-import com.perpetio.pricey.models.ProductHeader
+import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.theme.plate
+
+@Composable
+fun ListPage(
+    products: List<ProductArticle>,
+    onProductSelect: (String) -> Unit,
+) {
+    ListOfProducts(
+        products = products,
+        onProductSelect = onProductSelect
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    ListPage(
+        DataProvider.articles,
+        {}
+    )
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListPage(
-    products: List<ProductHeader>,
+fun ListOfProducts(
+    products: List<ProductArticle>,
     onProductSelect: (String) -> Unit,
 ) {
     val items = remember { products }
@@ -46,18 +66,9 @@ fun ListPage(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-    ListPage(
-        DataProvider.productsHeaders,
-        {}
-    )
-}
-
 @Composable
 private fun ProductItem(
-    product: ProductHeader,
+    product: ProductArticle,
     onSelect: (String) -> Unit
 ) {
     Card(
