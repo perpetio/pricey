@@ -2,7 +2,8 @@
     <string name="app_name">Pricey</string>
 
     <!-- List page -->
-    <string name="product_image">Product image</string>
+    <string name="search">Search</string>
+    <string name="categories">Categories</string>
     <string name="add_to_basket">Add to basket</string>
 
     <!-- Comparison page -->

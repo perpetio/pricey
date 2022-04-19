@@ -41,7 +41,10 @@ fun SetupPages(
             route = ListPage.name
         ) {
             ListPage(
-                products = DataProvider.articles,
+                foodCategories = DataProvider.foodCategories,
+                productArticles = DataProvider.productArticles,
+                onProductSearch = {},
+                onCategorySelect = {},
                 onProductSelect = { productName ->
                     navController.navigate("${ComparisonPage.name}/$productName")
                 }

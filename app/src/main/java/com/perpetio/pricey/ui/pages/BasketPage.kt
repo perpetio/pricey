@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.models.Product
-import com.perpetio.pricey.ui.theme.plate
+import com.perpetio.pricey.ui.theme.Plate
 
 @Composable
 fun BasketPage(
@@ -27,9 +27,9 @@ fun BasketPage(
     val items = remember { products }
     LazyColumn(
         contentPadding = PaddingValues(
-            start = plate.padding.dp,
-            top = plate.padding.dp,
-            end = plate.padding.dp,
+            start = Plate.padding.dp,
+            top = Plate.padding.dp,
+            end = Plate.padding.dp,
         )
     ) {
         items(
@@ -67,19 +67,19 @@ private fun ProductItem(
     Card(
         modifier = Modifier
             .padding(
-                end = plate.padding.dp,
-                bottom = plate.padding.dp
+                end = Plate.padding.dp,
+                bottom = Plate.padding.dp
             )
             .clickable {
                 onRemove(product)
             }
             .fillMaxWidth(),
-        elevation = plate.elevation.dp,
-        shape = RoundedCornerShape(plate.corners.dp)
+        elevation = Plate.elevation.dp,
+        shape = RoundedCornerShape(Plate.corners.dp)
     ) {
         Text(
             text = product.article.name,
-            modifier = Modifier.padding(plate.padding.dp)
+            modifier = Modifier.padding(Plate.padding.dp)
         )
     }
 }

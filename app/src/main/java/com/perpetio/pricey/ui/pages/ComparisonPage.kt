@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.models.Product
-import com.perpetio.pricey.ui.theme.plate
+import com.perpetio.pricey.ui.theme.Plate
 
 @Composable
 fun ComparisonPage(
@@ -31,17 +31,17 @@ fun ComparisonPage(
     goToBasket: () -> Unit
 ) {
 
-    val productHeader = products[0].article
+    val article = products[0].article
     val selectedProducts = remember {
         mutableStateListOf<Product>()
     }
     Column {
         Image(
-            painter = painterResource(productHeader.imageResId),
+            painter = painterResource(article.imageResId ?: article.foodCategory.imageResId),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp),
-            contentDescription = stringResource(R.string.product_image)
+            contentDescription = "Product image"
         )
         ComparisonList(
             products = products,
@@ -90,8 +90,8 @@ private fun ComparisonList(
     val items = remember { products }
     LazyColumn(
         contentPadding = PaddingValues(
-            start = plate.padding.dp,
-            top = plate.padding.dp
+            start = Plate.padding.dp,
+            top = Plate.padding.dp
         )
     ) {
         items(
@@ -116,18 +116,18 @@ private fun ProductItem(
     Card(
         modifier = Modifier
             .padding(
-                end = plate.padding.dp,
-                bottom = plate.padding.dp
+                end = Plate.padding.dp,
+                bottom = Plate.padding.dp
             )
             .clickable { onSelect(product) }
             .fillMaxWidth(),
-        elevation = plate.elevation.dp,
-        shape = RoundedCornerShape(plate.corners.dp),
+        elevation = Plate.elevation.dp,
+        shape = RoundedCornerShape(Plate.corners.dp),
         backgroundColor = if(isSelected) Color.DarkGray else MaterialTheme.colors.surface
     ) {
         Text(
             text = product.article.name,
-            modifier = Modifier.padding(plate.padding.dp)
+            modifier = Modifier.padding(Plate.padding.dp)
         )
     }
 }

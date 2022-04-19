@@ -26,7 +26,7 @@ object DataProvider {
         Store(storeChains[2], 5.1),
     )
 
-    val categories = listOf(
+    val foodCategories = listOf(
         FoodCategory("Fruits", R.drawable.ic_fruits),
         FoodCategory("Vegetables", R.drawable.ic_vegetables),
         FoodCategory("Bakery", R.drawable.ic_bakery),
@@ -34,18 +34,18 @@ object DataProvider {
         FoodCategory("Fruits", R.drawable.ic_fruits)
     )
 
-    val articles = listOf(
-        ProductArticle(categories[0], "Banana", R.drawable.fruit_banana, "kg"),
-        ProductArticle(categories[0], "Apple", R.drawable.fruit_apple, "kg"),
-        ProductArticle(categories[0], "Orange", R.drawable.fruit_orange, "kg"),
-        ProductArticle(categories[0], "Kiwi", R.drawable.fruit_kiwi, "kg"),
-        ProductArticle(categories[0], "Pomegranate", R.drawable.fruir_pomegranate, "kg"),
-        ProductArticle(categories[0], "Kiwi", R.drawable.fruit_kiwi, "kg")
+    val productArticles = listOf(
+        ProductArticle(foodCategories[0], "Banana", R.drawable.fruit_banana, "kg"),
+        ProductArticle(foodCategories[0], "Apple", R.drawable.fruit_apple, "kg"),
+        ProductArticle(foodCategories[0], "Orange", R.drawable.fruit_orange, "kg"),
+        ProductArticle(foodCategories[0], "Kiwi", R.drawable.fruit_kiwi, "kg"),
+        ProductArticle(foodCategories[0], "Pomegranate", R.drawable.fruir_pomegranate, "kg"),
+        ProductArticle(foodCategories[0], "Kiwi", R.drawable.fruit_kiwi, "kg")
     )
 
     val products = listOf(
-        Product(articles[0], stores[0], 12.0, 15.0, Date()),
-        Product(articles[0], stores[1], 13.0, 20.0, Date()),
+        Product(productArticles[0], stores[0], 12.0, 15.0, Date()),
+        Product(productArticles[0], stores[1], 13.0, 20.0, Date()),
     )
 
     fun getProducts(name: String): List<Product> {
