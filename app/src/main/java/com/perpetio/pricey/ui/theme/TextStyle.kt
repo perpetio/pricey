@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 class TextStyle(
-    color: Color = Color.Black
+    color: Color = AppColors.Black
 ) {
     val small = TextStyle(
         color = color,
@@ -16,7 +16,12 @@ class TextStyle(
     val main = TextStyle(
         color = color,
         fontSize = 14.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Normal
+    )
+    val bold = TextStyle(
+        color = color,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.ExtraBold
     )
     val title = TextStyle(
         color = color,

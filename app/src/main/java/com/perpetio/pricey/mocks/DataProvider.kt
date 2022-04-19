@@ -30,8 +30,7 @@ object DataProvider {
         FoodCategory("Fruits", R.drawable.ic_fruits),
         FoodCategory("Vegetables", R.drawable.ic_vegetables),
         FoodCategory("Bakery", R.drawable.ic_bakery),
-        FoodCategory("Meat", R.drawable.ic_meat),
-        FoodCategory("Fruits", R.drawable.ic_fruits)
+        FoodCategory("Meat", R.drawable.ic_meat)
     )
 
     val productArticles = listOf(
@@ -40,7 +39,7 @@ object DataProvider {
         ProductArticle(foodCategories[0], "Orange", R.drawable.fruit_orange, "kg"),
         ProductArticle(foodCategories[0], "Kiwi", R.drawable.fruit_kiwi, "kg"),
         ProductArticle(foodCategories[0], "Pomegranate", R.drawable.fruir_pomegranate, "kg"),
-        ProductArticle(foodCategories[0], "Kiwi", R.drawable.fruit_kiwi, "kg")
+        ProductArticle(foodCategories[0], "Pear", R.drawable.fruit_pear, "kg")
     )
 
     val products = listOf(
