@@ -3,7 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable-v24/ic_search.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_arrow_back.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_arrow_up.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_bakery.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_basket.xml" value="0.136" />
         <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_costco.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_filter.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_fruits.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_home.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_location.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_meat.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_search.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_start.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_unstart.xml" value="0.136" />
+        <entry key="..\:/Root/Work/Pricey/app/src/main/res/drawable/ic_vegetables.xml" value="0.136" />
       </map>
     </option>
   </component>

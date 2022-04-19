@@ -35,10 +35,12 @@ object DataProvider {
     )
 
     val articles = listOf(
-        ProductArticle(categories[0], "Banana", null, "kg"),
-        ProductArticle(categories[0], "Apple", null, "kg"),
-        ProductArticle(categories[0], "Orange", null, "kg"),
-        ProductArticle(categories[0], "Kiwi", null, "kg")
+        ProductArticle(categories[0], "Banana", R.drawable.fruit_banana, "kg"),
+        ProductArticle(categories[0], "Apple", R.drawable.fruit_apple, "kg"),
+        ProductArticle(categories[0], "Orange", R.drawable.fruit_orange, "kg"),
+        ProductArticle(categories[0], "Kiwi", R.drawable.fruit_kiwi, "kg"),
+        ProductArticle(categories[0], "Pomegranate", R.drawable.fruir_pomegranate, "kg"),
+        ProductArticle(categories[0], "Kiwi", R.drawable.fruit_kiwi, "kg")
     )
 
     val products = listOf(
