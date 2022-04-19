@@ -71,7 +71,10 @@ fun ListPage(
         ListOfCategories(
             foodCategories = foodCategories,
             selectedCategory = selectedCategory,
-            onCategorySelect = onCategorySelect
+            onCategorySelect = { foodCategory ->
+                selectedCategory = foodCategory
+                onCategorySelect(foodCategory)
+            }
         )
         Text(
             text = selectedCategory.name,
@@ -111,7 +114,7 @@ private fun SearchField(
             shape = RoundedCornerShape(Plate.corners.dp),
             colors = outlinedTextFieldColors(
                 unfocusedBorderColor = AppColors.Orange,
-                focusedBorderColor = AppColors.DarkGreen
+                focusedBorderColor = AppColors.Orange
             ),
             leadingIcon = { if (searchQuery.isEmpty()) SearchIcon() },
             trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() }
