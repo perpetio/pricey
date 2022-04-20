@@ -1,5 +1,9 @@
 package com.perpetio.pricey.ui.theme
 
+object SpaceStyle {
+    const val main = 10
+}
+
 object Plate {
     const val padding = 10
     const val corners = 15
@@ -16,7 +20,7 @@ object CheckedItem {
 }
 
 object ButtonStyle {
-    const val size = 30
+    const val size = 40
     const val padding = 10
 }
 

@@ -13,7 +13,10 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -24,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
+import com.perpetio.pricey.data.Filter
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
@@ -32,11 +36,14 @@ import com.perpetio.pricey.ui.theme.*
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
+    val filters = Filter.values().toList()
     ComparisonPage(
-        DataProvider.filters,
-        true,
         DataProvider.productArticles[0],
+        filters,
+        filters[0],
+        SortType.Ascending,
         DataProvider.products,
+        {},
         {},
         {},
         {}
@@ -45,22 +52,18 @@ private fun Preview() {
 
 @Composable
 fun ComparisonPage(
-    filters: List<Int>,
     productArticle: ProductArticle,
+    filters: List<Filter>,
+    selectedFilter: Filter,
+    sortType: SortType,
     products: List<Product>,
-    onCheckFilter: (Int) -> Unit,
+    onCheckFilter: (Filter) -> Unit,
     onChangeSort: (SortType) -> Unit,
     onAddToBasket: (List<Product>) -> Unit,
     goBack: () -> Unit,
 ) {
     val selectedProducts = remember {
         mutableStateListOf<Product>()
-    }
-    var selectedFilter by remember {
-        mutableStateOf(filters[0])
-    }
-    var sortType by remember {
-        mutableStateOf(SortType.Descending)
     }
     Column {
         Header(
@@ -71,15 +74,9 @@ fun ComparisonPage(
             FilterBar(
                 filters = filters,
                 selectedFilter = selectedFilter,
-                isAscendingSort = sortType,
-                onCheckFilter = { filter ->
-                    selectedFilter = filter
-                    onCheckFilter(filter)
-                },
-                onChangeSort = {
-                    sortType =
-                        onChangeSort()
-                }
+                sortType = sortType,
+                onCheckFilter = onCheckFilter,
+                onChangeSort = onChangeSort
             )
         }
         ComparisonList(
@@ -113,33 +110,45 @@ private fun Header(
         ),
         elevation = Plate.elevation.dp
     ) {
-        Image(
-            painter = painterResource(R.drawable.ic_arrow_back),
-            contentDescription = "Button back",
-            colorFilter = ColorFilter.tint(AppColors.Orange),
-            modifier = Modifier
-                .size(ButtonStyle.size.dp)
-                .padding(50.dp)
-                .clickable { goBack() }
-        )
-        Image(
-            painter = painterResource(
-                productArticle.imageResId ?: productArticle.foodCategory.imageResId
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            contentDescription = "Product image"
-        )
+        Box(
+            modifier = Modifier.padding(SpaceStyle.main.dp),
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_arrow_back),
+                contentDescription = "Button back",
+                colorFilter = ColorFilter.tint(AppColors.Orange),
+                modifier = Modifier
+                    .size(ButtonStyle.size.dp)
+                    .padding(ButtonStyle.padding.dp)
+                    .clickable { goBack() }
+                    .align(Alignment.TopStart)
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(productArticle.imageResId),
+                    modifier = Modifier
+                        .padding(bottom = SpaceStyle.main.dp)
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    contentDescription = "Product image"
+                )
+                Text(
+                    text = productArticle.name,
+                    style = TextStyle(AppColors.Orange).big
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun FilterBar(
-    filters: List<Int>,
-    selectedFilter: Int,
-    isAscendingSort: Boolean,
-    onCheckFilter: (Int) -> Unit,
+    filters: List<Filter>,
+    selectedFilter: Filter,
+    sortType: SortType,
+    onCheckFilter: (Filter) -> Unit,
     onChangeSort: (SortType) -> Unit
 ) {
     val items = remember { filters }
@@ -154,8 +163,8 @@ private fun FilterBar(
             itemContent = { filter ->
                 FilterItem(
                     filter = filter,
+                    sortType = sortType,
                     isSelected = (filter == selectedFilter),
-                    isAscendingSort = isAscendingSort,
                     onCheck = onCheckFilter,
                     onChangeSort = onChangeSort
                 )
@@ -166,24 +175,25 @@ private fun FilterBar(
 
 @Composable
 private fun FilterItem(
-    filter: Int,
+    filter: Filter,
+    sortType: SortType,
     isSelected: Boolean,
-    isAscendingSort: Boolean,
-    onCheck: (Int) -> Unit,
+    onCheck: (Filter) -> Unit,
     onChangeSort: (SortType) -> Unit
 ) {
     Column(
         modifier = Modifier.selectable(
             selected = isSelected,
             onClick = {
-                if(isSelected) onChangeSort()
-                onCheck(filter)
+                if (isSelected) {
+                    onChangeSort(sortType.getOpposite())
+                } else onCheck(filter)
             }
         )
     ) {
         Row {
             Text(
-                text = stringResource(filter),
+                text = stringResource(filter.resId),
                 color = AppColors.DarkGreen
             )
             Spacer(modifier = Modifier.width(IconStyle.padding.dp))
@@ -193,7 +203,7 @@ private fun FilterItem(
                 colorFilter = ColorFilter.tint(AppColors.DarkGreen),
                 modifier = Modifier
                     .size(IconStyle.size.dp)
-                    .rotate(if (isAscendingSort) 180f else 0f)
+                    .rotate(if (sortType == SortType.Ascending) 180f else 0f)
             )
         }
         if (isSelected) {
@@ -205,7 +215,6 @@ private fun FilterItem(
             )
         }
     }
-}
 }
 
 @Composable

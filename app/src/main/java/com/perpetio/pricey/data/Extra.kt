@@ -13,10 +13,8 @@ enum class Filter(
 enum class SortType {
     Ascending, Descending;
 
-    fun getOpposite(
-        sortType: SortType
-    ): SortType {
-        return if (sortType == Ascending) {
+    fun getOpposite(): SortType {
+        return if (this == Ascending) {
             Descending
         } else Ascending
     }

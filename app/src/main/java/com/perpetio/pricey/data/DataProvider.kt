@@ -43,8 +43,8 @@ object DataProvider {
     )
 
     val products = listOf(
-        Product(productArticles[0], stores[0], 12.0, 15.0, Date()),
-        Product(productArticles[0], stores[1], 13.0, 20.0, Date()),
+        Product(productArticles[0], stores[0], 3,12.0, 15.0, Date()),
+        Product(productArticles[0], stores[1], 5,13.0, 20.0, Date()),
     )
 
     fun getProducts(name: String): List<Product> {
