@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.mocks.DataProvider
+import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.theme.*
@@ -128,7 +128,7 @@ private fun SearchIcon() {
         painter = painterResource(R.drawable.ic_search),
         tint = AppColors.Orange,
         contentDescription = "search",
-        modifier = Modifier.size(Icon.size.dp)
+        modifier = Modifier.size(IconStyle.size.dp)
     )
 }
 
@@ -189,7 +189,7 @@ private fun CategoryItem(
                     if (isSelected) Color.White else AppColors.Orange
                 )
             )
-            Spacer(modifier = Modifier.width(Icon.padding.dp))
+            Spacer(modifier = Modifier.width(IconStyle.padding.dp))
             Text(
                 text = category.name,
                 color = if (isSelected) Color.White else AppColors.Orange

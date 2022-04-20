@@ -7,6 +7,9 @@
     <string name="add_to_basket">Add to basket</string>
 
     <!-- Comparison page -->
+    <string name="price">Price</string>
+    <string name="rating">Rating</string>
+    <string name="expiration">Expiration</string>
 
     <!-- Basket page -->
 </resources>

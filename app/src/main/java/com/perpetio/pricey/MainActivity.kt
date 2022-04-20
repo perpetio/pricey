@@ -24,23 +24,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.ui.pages.AppPage
-import com.perpetio.pricey.ui.pages.AppPage.*
-import com.perpetio.pricey.ui.pages.BasketPage
-import com.perpetio.pricey.ui.pages.ComparisonPage
-import com.perpetio.pricey.ui.pages.ListPage
 import com.perpetio.pricey.ui.theme.Animation
 import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Plate
 import com.perpetio.pricey.ui.theme.PriceyTheme
 import com.perpetio.pricey.view_models.BasketViewModel
 import com.perpetio.pricey.view_models.FilterViewModel
+import com.perpetio.pricey.view_models.NavigationHost
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,63 +72,6 @@ private fun AppUi(
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )
-    }
-}
-
-@Composable
-fun NavigationHost(
-    filterViewModel: FilterViewModel,
-    basketViewModel: BasketViewModel,
-    navController: NavHostController,
-    modifier: Modifier,
-) {
-    NavHost(
-        navController = navController,
-        startDestination = ListPage.name,
-        modifier = modifier
-    ) {
-        composable(
-            route = ListPage.name
-        ) {
-            ListPage(
-                foodCategories = DataProvider.foodCategories,
-                productArticles = DataProvider.productArticles,
-                onProductSearch = {},
-                onCategorySelect = {},
-                onProductSelect = { productArticle ->
-                    filterViewModel.selectedArticle.value = productArticle
-                    navController.navigate(ComparisonPage.name)
-                }
-            )
-        }
-        composable(
-            route = ComparisonPage.name
-        ) {
-            val productArticle = filterViewModel.selectedArticle.value!!
-            ComparisonPage(
-                productArticle = productArticle,
-                products = DataProvider.getProducts(productArticle.name),
-                onAddToBasket = { product ->
-                    basketViewModel.addToBasket(product)
-                },
-                goToBasket = {
-                    navController.navigate(BasketPage.name)
-                }
-            )
-        }
-        composable(
-            route = BasketPage.name
-        ) {
-            BasketPage(
-                products = basketViewModel.products,
-                onProductRemove = { product ->
-                    basketViewModel.removeFromBasket(product)
-                },
-                onGoBack = {
-                    navController.navigate(ListPage.name)
-                }
-            )
-        }
     }
 }
 

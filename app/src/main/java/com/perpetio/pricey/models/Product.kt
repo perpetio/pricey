@@ -5,6 +5,7 @@ import java.util.*
 data class Product(
     val article: ProductArticle,
     val store: Store,
+    val rating: Int, // 0..5
     val price: Double,
     val amount: Double,
     val expirationDate: Date

@@ -1,4 +1,4 @@
-package com.perpetio.pricey.mocks
+package com.perpetio.pricey.data
 
 import com.perpetio.pricey.R
 import com.perpetio.pricey.models.*
