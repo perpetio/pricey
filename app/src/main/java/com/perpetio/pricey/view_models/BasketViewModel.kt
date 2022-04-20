@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.models.Product
 
 class BasketViewModel : ViewModel() {
-    var products = mutableStateListOf<Product>()
+    val products = mutableStateListOf<Product>()
 
     fun addToBasket(newProducts: List<Product>) {
         newProducts.forEach { newProduct ->

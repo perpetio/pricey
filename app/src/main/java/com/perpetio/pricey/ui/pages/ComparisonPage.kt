@@ -22,22 +22,24 @@ import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.mocks.DataProvider
 import com.perpetio.pricey.models.Product
+import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.theme.Plate
 
 @Composable
 fun ComparisonPage(
+    productArticle: ProductArticle,
     products: List<Product>,
     onAddToBasket: (List<Product>) -> Unit,
     goToBasket: () -> Unit
 ) {
-
-    val article = products[0].article
     val selectedProducts = remember {
         mutableStateListOf<Product>()
     }
     Column {
         Image(
-            painter = painterResource(article.imageResId ?: article.foodCategory.imageResId),
+            painter = painterResource(
+                productArticle.imageResId ?: productArticle.foodCategory.imageResId
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp),
@@ -75,6 +77,7 @@ fun ComparisonPage(
 @Composable
 private fun Preview() {
     ComparisonPage(
+        DataProvider.productArticles[0],
         DataProvider.products,
         {},
         {}

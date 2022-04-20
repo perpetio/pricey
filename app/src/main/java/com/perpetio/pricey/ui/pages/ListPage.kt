@@ -43,7 +43,7 @@ fun ListPage(
     productArticles: List<ProductArticle>,
     onProductSearch: (String) -> Unit,
     onCategorySelect: (FoodCategory) -> Unit,
-    onProductSelect: (String) -> Unit,
+    onProductSelect: (ProductArticle) -> Unit,
 ) {
     var searchQuery by remember {
         mutableStateOf("")
@@ -202,7 +202,7 @@ private fun CategoryItem(
 @Composable
 private fun ListOfProducts(
     productArticles: List<ProductArticle>,
-    onProductSelect: (String) -> Unit,
+    onProductSelect: (ProductArticle) -> Unit,
 ) {
     val items = remember { productArticles }
     LazyVerticalGrid(
@@ -226,7 +226,7 @@ private fun ListOfProducts(
 @Composable
 private fun ProductItem(
     productArticle: ProductArticle,
-    onSelect: (String) -> Unit
+    onSelect: (ProductArticle) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -234,7 +234,7 @@ private fun ProductItem(
                 end = Plate.padding.dp,
                 bottom = Plate.padding.dp
             )
-            .clickable { onSelect(productArticle.name) }
+            .clickable { onSelect(productArticle) }
             .fillMaxWidth(),
         elevation = Plate.elevation.dp,
         shape = RoundedCornerShape(Plate.corners.dp)
