@@ -9,13 +9,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -41,8 +36,9 @@ private fun Preview() {
         DataProvider.productArticles[0],
         filters,
         filters[0],
-        SortType.Ascending,
+        SortType.Descending,
         DataProvider.products,
+        {},
         {},
         {},
         {},
@@ -60,17 +56,30 @@ fun ComparisonPage(
     onCheckFilter: (Filter) -> Unit,
     onChangeSort: (SortType) -> Unit,
     onAddToBasket: (List<Product>) -> Unit,
+    onOpenFilter: () -> Unit,
     goBack: () -> Unit,
 ) {
+    var isSelectionMode by remember {
+        mutableStateOf(false)
+    }
     val selectedProducts = remember {
         mutableStateListOf<Product>()
     }
-    Column {
+    Column(
+        Modifier.background(
+            color = AppColors.LightOrange
+        )
+    ) {
         Header(
             productArticle = productArticle,
             goBack = goBack
         )
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
             FilterBar(
                 filters = filters,
                 selectedFilter = selectedFilter,
@@ -78,23 +87,24 @@ fun ComparisonPage(
                 onCheckFilter = onCheckFilter,
                 onChangeSort = onChangeSort
             )
+            Spacer(modifier = Modifier.weight(1f))
+            FilterButton(
+                isSelectionMode = isSelectionMode,
+                onOpenFilter = onOpenFilter,
+                onAddToBasket = {
+                    isSelectionMode = false
+                    onAddToBasket(selectedProducts)
+                }
+            )
         }
         ComparisonList(
             products = products,
             selectedProducts = selectedProducts,
             onProductSelect = { product ->
+                isSelectionMode = true
                 selectedProducts.add(product)
             }
         )
-        Button(
-            onClick = {
-                onAddToBasket(selectedProducts)
-            }
-        ) {
-            Text(
-                text = stringResource(R.string.add_to_basket)
-            )
-        }
     }
 }
 
@@ -153,10 +163,7 @@ private fun FilterBar(
 ) {
     val items = remember { filters }
     LazyRow(
-        contentPadding = PaddingValues(
-            start = Plate.padding.dp,
-            top = Plate.padding.dp
-        )
+        verticalAlignment = Alignment.CenterVertically
     ) {
         items(
             items = items,
@@ -174,6 +181,35 @@ private fun FilterBar(
 }
 
 @Composable
+private fun FilterButton(
+    isSelectionMode: Boolean,
+    onOpenFilter: () -> Unit,
+    onAddToBasket: () -> Unit,
+) {
+    Surface(
+        color = AppColors.Orange,
+        shape = RoundedCornerShape(Plate.corners.dp),
+        modifier = Modifier
+            .size(ButtonStyle.size.dp)
+            .clickable {
+                if (isSelectionMode) {
+                    onAddToBasket()
+                } else onOpenFilter()
+            }
+    ) {
+        Image(
+            painter = painterResource(
+                if (isSelectionMode) R.drawable.ic_basket else R.drawable.ic_filter
+            ),
+            contentDescription = "Button back",
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(ButtonStyle.padding.dp)
+        )
+    }
+}
+
+@Composable
 private fun FilterItem(
     filter: Filter,
     sortType: SortType,
@@ -182,36 +218,42 @@ private fun FilterItem(
     onChangeSort: (SortType) -> Unit
 ) {
     Column(
-        modifier = Modifier.selectable(
-            selected = isSelected,
-            onClick = {
-                if (isSelected) {
-                    onChangeSort(sortType.getOpposite())
-                } else onCheck(filter)
-            }
-        )
+        modifier = Modifier
+            .width(IntrinsicSize.Max)
+            .padding(end = 20.dp)
+            .selectable(
+                selected = isSelected,
+                onClick = {
+                    if (isSelected) {
+                        onChangeSort(sortType.getOpposite())
+                    } else onCheck(filter)
+                }
+            )
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = stringResource(filter.resId),
                 color = AppColors.DarkGreen
             )
-            Spacer(modifier = Modifier.width(IconStyle.padding.dp))
-            Image(
-                painter = painterResource(R.drawable.ic_arrow_up),
-                contentDescription = "Filer direction",
-                colorFilter = ColorFilter.tint(AppColors.DarkGreen),
-                modifier = Modifier
-                    .size(IconStyle.size.dp)
-                    .rotate(if (sortType == SortType.Ascending) 180f else 0f)
-            )
+            if (isSelected) {
+                Spacer(modifier = Modifier.width(IconStyle.padding.dp))
+                Image(
+                    painter = painterResource(R.drawable.ic_arrow_up),
+                    contentDescription = "Filer direction",
+                    colorFilter = ColorFilter.tint(AppColors.DarkGreen),
+                    modifier = Modifier
+                        .size(IconStyle.size.dp)
+                        .rotate(if (sortType == SortType.Ascending) 180f else 0f)
+                )
+            }
         }
         if (isSelected) {
-            Spacer(
-                modifier = Modifier
-                    .height(LineStyle.size.dp)
-                    .fillMaxWidth()
-                    .background(AppColors.DarkGreen)
+            Spacer(modifier = Modifier.height(IconStyle.padding.dp))
+            Divider(
+                color = AppColors.DarkGreen,
+                thickness = LineStyle.size.dp
             )
         }
     }

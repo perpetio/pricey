@@ -8,7 +8,7 @@ object Plate {
     const val padding = 10
     const val corners = 15
     const val border = 1
-    const val elevation = 2
+    const val elevation = 5
 }
 object IconStyle {
     const val size = 15
@@ -25,5 +25,5 @@ object ButtonStyle {
 }
 
 object LineStyle {
-    const val size = 1
+    const val size = 2
 }

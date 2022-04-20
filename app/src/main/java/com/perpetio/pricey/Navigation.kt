@@ -66,6 +66,9 @@ fun NavigationHost(
                 onAddToBasket = { product ->
                     basketViewModel.addToBasket(product)
                 },
+                onOpenFilter = {
+                    navController.navigate(AppPage.BasketPage.name) // todo Open filter
+                },
                 goBack = {
                     navController.popBackStack()
                 }
