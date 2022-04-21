@@ -71,7 +71,6 @@ fun ComparisonPage(
 ) {
     var isSelectionMode by remember { mutableStateOf(false) }
     val selectedProducts = remember { basketProducts.toMutableStateList() }
-    Log.d("123", "selectedProducts.addAll(basketProducts)")
     Column(
         Modifier.background(
             color = AppColors.LightOrange
@@ -281,7 +280,7 @@ private fun ComparisonList(
         modifier = Modifier.padding(horizontal = Plate.padding.dp)
     ) {
         items(
-            items = items,
+            items = products,
             itemContent = { product ->
                 ProductItem(
                     product = product,

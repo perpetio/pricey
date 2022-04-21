@@ -2,6 +2,7 @@ package com.perpetio.pricey.data
 
 import com.perpetio.pricey.R
 import com.perpetio.pricey.models.*
+import com.perpetio.pricey.utils.DateManager
 import java.util.*
 
 object DataProvider {
@@ -43,8 +44,12 @@ object DataProvider {
     )
 
     val products = listOf(
-        Product(productArticles[0], stores[0], 3,12.0, 15.0, Date()),
-        Product(productArticles[0], stores[1], 5,13.0, 20.0, Date()),
+        Product(productArticles[0], stores[0], 3,12.0, 15.0, DateManager.dateFromNow(2)),
+        Product(productArticles[0], stores[1], 5,13.0, 10.0, DateManager.dateFromNow(5)),
+        Product(productArticles[0], stores[4], 4,11.0, 5.0, DateManager.dateFromNow(7)),
+        Product(productArticles[0], stores[5], 2,10.0, 30.0, DateManager.dateFromNow(4)),
+        Product(productArticles[0], stores[7], 3,8.0, 7.0, DateManager.dateFromNow(3)),
+        Product(productArticles[0], stores[8], 4,10.0, 12.0, DateManager.dateFromNow(5)),
     )
 
     fun getProducts(name: String): List<Product> {
