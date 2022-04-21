@@ -64,8 +64,8 @@ fun NavigationHost(
                     selectedSort = sortType
                     products = filterViewModel.getProducts(selectedFilter, selectedSort)
                 },
-                onUpdateBasket = { basketList ->
-                    basketViewModel.updateList(basketList)
+                onUpdateBasket = { newProducts ->
+                    basketViewModel.addToBasket(newProducts)
                 },
                 onOpenFilter = {
                     navController.navigate(AppPage.BasketPage.name) // todo Open filter

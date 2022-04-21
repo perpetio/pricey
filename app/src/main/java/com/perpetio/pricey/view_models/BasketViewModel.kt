@@ -7,9 +7,12 @@ class BasketViewModel : ViewModel() {
     private val _basketList = mutableListOf<Product>()
     val basketList: List<Product> = _basketList
 
-    fun updateList(products: List<Product>) {
-        _basketList.clear()
-        _basketList.addAll(products)
+    fun addToBasket(products: List<Product>) {
+        products.forEach { product ->
+            if (!_basketList.contains(product)) {
+                _basketList.addAll(products)
+            }
+        }
     }
 
     fun removeFromList(extraProducts: List<Product>) {

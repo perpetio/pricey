@@ -100,6 +100,7 @@ fun ComparisonPage(
                 onAddToBasket = {
                     isSelectionMode = false
                     onUpdateBasket(selectedProducts)
+                    selectedProducts.clear()
                 }
             )
         }
@@ -109,9 +110,7 @@ fun ComparisonPage(
             basketProducts = basketProducts,
             onProductSelect = { product ->
                 isSelectionMode = true
-                if (selectedProducts.contains(product)) {
-                    selectedProducts.remove(product)
-                } else selectedProducts.add(product)
+                selectedProducts.add(product)
             }
         )
     }
@@ -328,8 +327,8 @@ private fun ProductItem(
                     Image(
                         painter = painterResource(product.store.chain.imageResId),
                         contentDescription = "Store chain image",
-                        contentScale = ContentScale.FillHeight,
-                        modifier = Modifier.height(30.dp)
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.width(70.dp)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Row(
