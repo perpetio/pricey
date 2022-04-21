@@ -102,7 +102,9 @@ fun ComparisonPage(
             selectedProducts = selectedProducts,
             onProductSelect = { product ->
                 isSelectionMode = true
-                selectedProducts.add(product)
+                if (selectedProducts.contains(product)) {
+                    selectedProducts.remove(product)
+                } else selectedProducts.add(product)
             }
         )
     }
@@ -291,17 +293,16 @@ private fun ProductItem(
     isSelected: Boolean,
     onSelect: (Product) -> Unit
 ) {
+    val passiveColor = MaterialTheme.colors.surface
+    val activeColor = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
     Card(
         modifier = Modifier
-            .padding(
-                end = Plate.padding.dp,
-                bottom = Plate.padding.dp
-            )
+            .padding(bottom = Plate.padding.dp)
             .clickable { onSelect(product) }
             .fillMaxWidth(),
         elevation = Plate.elevation.dp,
         shape = RoundedCornerShape(Plate.corners.dp),
-        backgroundColor = if (isSelected) Color.DarkGray else MaterialTheme.colors.surface
+        backgroundColor = if (isSelected) activeColor else passiveColor
     ) {
         Text(
             text = product.article.name,
