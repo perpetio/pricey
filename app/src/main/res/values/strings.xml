@@ -15,4 +15,6 @@
     <string name="kg">kg</string>
 
     <!-- Basket page -->
+    <string name="cart">Cart</string>
+    <string name="total">Total</string>
 </resources>

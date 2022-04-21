@@ -79,11 +79,11 @@ fun NavigationHost(
             route = AppPage.BasketPage.name
         ) {
             BasketPage(
-                products = basketViewModel.basketList,
+                basketList = basketViewModel.basketList,
                 onProductRemove = { product ->
                     basketViewModel.removeFromList(listOf(product)) // todo
                 },
-                onGoBack = {
+                goBack = {
                     navController.navigate(AppPage.ListPage.name)
                 }
             )

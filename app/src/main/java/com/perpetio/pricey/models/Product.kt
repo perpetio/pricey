@@ -10,6 +10,18 @@ data class Product(
     val amount: Double,
     val expirationDate: Date
 ) {
+    constructor(
+        amount: Double,
+        data: Product
+    ): this(
+        data.article,
+        data.store,
+        data.rating,
+        data.price,
+        amount,
+        data.expirationDate
+    )
+
     override fun equals(other: Any?): Boolean {
         if (other === this) return true
         if (other == null) return false
