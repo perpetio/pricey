@@ -25,4 +25,8 @@ data class Product(
                 store.chain.name.hashCode() +
                 store.remoteness.toInt()
     }
+
+    companion object {
+        const val MAX_RATING = 5 // starts
+    }
 }

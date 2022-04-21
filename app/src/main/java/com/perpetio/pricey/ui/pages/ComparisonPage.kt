@@ -14,8 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +27,8 @@ import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.theme.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Preview(showBackground = true)
 @Composable
@@ -269,10 +271,7 @@ private fun ComparisonList(
 ) {
     val items = remember { products }
     LazyColumn(
-        contentPadding = PaddingValues(
-            start = Plate.padding.dp,
-            top = Plate.padding.dp
-        )
+        modifier = Modifier.padding(horizontal = Plate.padding.dp)
     ) {
         items(
             items = items,
@@ -304,9 +303,85 @@ private fun ProductItem(
         shape = RoundedCornerShape(Plate.corners.dp),
         backgroundColor = if (isSelected) activeColor else passiveColor
     ) {
-        Text(
-            text = product.article.name,
-            modifier = Modifier.padding(Plate.padding.dp)
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.padding(
+                horizontal = 20.dp,
+                vertical = 10.dp
+            )
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(product.store.chain.imageResId),
+                    contentDescription = "Store chain image",
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier.height(30.dp)
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Row {
+                    Image(
+                        painter = painterResource(R.drawable.ic_location),
+                        colorFilter = ColorFilter.tint(AppColors.Orange),
+                        contentDescription = "Store chain image",
+                        modifier = Modifier.height(20.dp)
+                    )
+                    Text(
+                        text = "${product.store.remoteness} ${stringResource(R.string.km)}",
+                        style = TextStyle().main,
+                        modifier = Modifier.padding(start = IconStyle.padding.dp)
+                    )
+                }
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "${product.price} ${stringResource(R.string.dollar)}",
+                    style = TextStyle(AppColors.Orange).big
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "(${product.amount} ${stringResource(R.string.kg)})",
+                    style = TextStyle().main
+                )
+            }
+            Column {
+                Rating(
+                    currentValue = product.rating,
+                    maxValue = Product.MAX_RATING
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                Text(
+                    text = "Exp: ${dateFormat.format(product.expirationDate)}",
+                    style = TextStyle().main
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Rating(
+    currentValue: Int,
+    maxValue: Int
+) {
+    Row {
+        for (tmpValue in 1..maxValue) {
+            Image(
+                painter = painterResource(
+                    if (tmpValue <= currentValue) R.drawable.ic_start
+                    else R.drawable.ic_unstart
+                ),
+                colorFilter = ColorFilter.tint(AppColors.Orange),
+                contentDescription = "Rating star",
+                modifier = Modifier
+                    .height(15.dp)
+                    .padding(end = 10.dp)
+            )
+        }
     }
 }

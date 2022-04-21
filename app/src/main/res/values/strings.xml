@@ -10,6 +10,9 @@
     <string name="price">Price</string>
     <string name="rating">Rating</string>
     <string name="expiration">Expiration</string>
+    <string name="km">km</string>
+    <string name="dollar">$</string>
+    <string name="kg">kg</string>
 
     <!-- Basket page -->
 </resources>
