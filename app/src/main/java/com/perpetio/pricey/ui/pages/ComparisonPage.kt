@@ -110,7 +110,11 @@ fun ComparisonPage(
             basketProducts = basketProducts,
             onProductSelect = { product ->
                 isSelectionMode = true
-                selectedProducts.add(product)
+                selectedProducts.apply {
+                    if(contains(product)) {
+                        remove(product)
+                    } else add(product)
+                }
             }
         )
     }
