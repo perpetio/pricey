@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -35,7 +36,7 @@ import com.perpetio.pricey.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Preview(showBackground = true)
+
 @Composable
 private fun Preview() {
     val filters = Filter.values().toList()
@@ -106,6 +107,7 @@ fun ComparisonPage(
         ComparisonList(
             products = products,
             selectedProducts = selectedProducts,
+            basketProducts = basketProducts,
             onProductSelect = { product ->
                 isSelectionMode = true
                 if (selectedProducts.contains(product)) {
@@ -271,6 +273,7 @@ private fun FilterItem(
 private fun ComparisonList(
     products: List<Product>,
     selectedProducts: List<Product>,
+    basketProducts: List<Product>,
     onProductSelect: (Product) -> Unit,
 ) {
     val items = remember { products }
@@ -283,6 +286,7 @@ private fun ComparisonList(
                 ProductItem(
                     product = product,
                     isSelected = selectedProducts.contains(product),
+                    isInBasket = basketProducts.contains(product),
                     onSelect = onProductSelect
                 )
             }
@@ -294,6 +298,7 @@ private fun ComparisonList(
 private fun ProductItem(
     product: Product,
     isSelected: Boolean,
+    isInBasket: Boolean,
     onSelect: (Product) -> Unit
 ) {
     Card(
@@ -307,64 +312,88 @@ private fun ProductItem(
             BorderStroke(LineStyle.size.dp, AppColors.Orange)
         } else null
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.padding(
-                horizontal = 20.dp,
-                vertical = 10.dp
-            )
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+        Box {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 20.dp,
+                        vertical = 10.dp
+                    )
             ) {
-                Image(
-                    painter = painterResource(product.store.chain.imageResId),
-                    contentDescription = "Store chain image",
-                    contentScale = ContentScale.FillHeight,
-                    modifier = Modifier.height(30.dp)
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_location),
-                        colorFilter = ColorFilter.tint(AppColors.Orange),
+                        painter = painterResource(product.store.chain.imageResId),
                         contentDescription = "Store chain image",
-                        modifier = Modifier.height(15.dp)
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier.height(30.dp)
                     )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_location),
+                            colorFilter = ColorFilter.tint(AppColors.Orange),
+                            contentDescription = "Store chain image",
+                            modifier = Modifier.height(15.dp)
+                        )
+                        Text(
+                            text = "${product.store.remoteness} ${stringResource(R.string.km)}",
+                            style = Text.Style(Text.Size.Small).value,
+                            modifier = Modifier.padding(start = IconStyle.padding.dp)
+                        )
+                    }
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
-                        text = "${product.store.remoteness} ${stringResource(R.string.km)}",
-                        style = Text.Style(Text.Size.Small).value,
-                        modifier = Modifier.padding(start = IconStyle.padding.dp)
+                        text = "${product.price} ${stringResource(R.string.dollar)}",
+                        style = Text.Style(Text.Size.Max, AppColors.Orange).value
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "(${product.amount} ${stringResource(R.string.kg)})",
+                        style = Text.Style(Text.Size.Small).value
+                    )
+                }
+                Column {
+                    Rating(
+                        currentValue = product.rating,
+                        maxValue = Product.MAX_RATING
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    Text(
+                        text = "Exp: ${dateFormat.format(product.expirationDate)}",
+                        style = Text.Style(Text.Size.Small).value
                     )
                 }
             }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "${product.price} ${stringResource(R.string.dollar)}",
-                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = "(${product.amount} ${stringResource(R.string.kg)})",
-                    style = Text.Style(Text.Size.Small).value
-                )
-            }
-            Column {
-                Rating(
-                    currentValue = product.rating,
-                    maxValue = Product.MAX_RATING
-                )
-                Spacer(modifier = Modifier.height(15.dp))
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                Text(
-                    text = "Exp: ${dateFormat.format(product.expirationDate)}",
-                    style = Text.Style(Text.Size.Small).value
-                )
+            if (isInBasket) {
+                Surface(
+                    color = AppColors.Orange,
+                    shape = RoundedCornerShape(
+                        topEnd = Plate.corners.dp,
+                        bottomStart = Plate.corners.dp
+                    ),
+                    modifier = Modifier
+                        .size(25.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_basket),
+                        contentDescription = "Basket mark",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(7.dp)
+                    )
+                }
             }
         }
     }
