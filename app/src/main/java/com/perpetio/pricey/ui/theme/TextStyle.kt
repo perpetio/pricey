@@ -4,19 +4,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+
 object Text {
     class Style(
-        fontSize: FontSize,
+        textSize: Size,
         color: Color = AppColors.Black,
-        fontWeight: FontWeight = FontWeight.Medium,
+        fontWeight: FontWeight? = null,
     ) {
         val value = TextStyle(
             color = color,
-            fontSize = fontSize.value.sp,
-            fontWeight = fontWeight
+            fontSize = textSize.value.sp,
+            fontWeight = fontWeight ?: getFontWeight(textSize)
         )
+
+        private fun getFontWeight(
+            textSize: Size
+        ): FontWeight {
+            return when (textSize) {
+                Size.Small -> FontWeight.Bold
+                Size.Main -> FontWeight.Medium
+                Size.Bold,
+                Size.Title,
+                Size.Max -> FontWeight.ExtraBold
+            }
+        }
     }
-    enum class FontSize(
+
+    enum class Size(
         val value: Int
     ) {
         Small(12),
@@ -25,33 +39,4 @@ object Text {
         Title(18),
         Max(22)
     }
-}
-class TextStyle(
-    color: Color = AppColors.Black
-) {
-    val small = TextStyle(
-        color = color,
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Medium
-    )
-    val main = TextStyle(
-        color = color,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Medium
-    )
-    val bold = TextStyle(
-        color = color,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.ExtraBold
-    )
-    val title = TextStyle(
-        color = color,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.ExtraBold
-    )
-    val big = TextStyle(
-        color = color,
-        fontSize = 22.sp,
-        fontWeight = FontWeight.ExtraBold
-    )
 }

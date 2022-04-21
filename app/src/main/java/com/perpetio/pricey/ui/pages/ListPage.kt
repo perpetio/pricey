@@ -65,7 +65,7 @@ fun ListPage(
         )
         Text(
             stringResource(R.string.categories),
-            style = TextStyle(AppColors.DarkGreen).main,
+            style = Text.Style(Text.Size.Bold, AppColors.DarkGreen).value,
             modifier = Modifier.padding(Plate.padding.dp)
         )
         ListOfCategories(
@@ -78,7 +78,7 @@ fun ListPage(
         )
         Text(
             text = selectedCategory.name,
-            style = TextStyle(AppColors.DarkGreen).title,
+            style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
             modifier = Modifier.padding(Plate.padding.dp)
         )
         ListOfProducts(
@@ -100,12 +100,12 @@ private fun SearchField(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { onSearchChange(it) },
-            textStyle = TextStyle().small,
+            textStyle = Text.Style(Text.Size.Small).value,
             singleLine = true,
             label = {
                 Text(
                     text = stringResource(R.string.search),
-                    style = TextStyle(AppColors.Gray).main
+                    style = Text.Style(Text.Size.Main, AppColors.Gray).value
                 )
             },
             modifier = Modifier
@@ -254,7 +254,7 @@ private fun ProductItem(
             )
             Text(
                 text = productArticle.name,
-                style = TextStyle(AppColors.Orange).title,
+                style = Text.Style(Text.Size.Title, AppColors.Orange).value,
                 modifier = Modifier.padding(top = Plate.padding.dp)
             )
         }

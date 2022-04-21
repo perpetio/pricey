@@ -150,7 +150,7 @@ private fun Header(
                 )
                 Text(
                     text = productArticle.name,
-                    style = TextStyle(AppColors.Orange).big
+                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
                 )
             }
         }
@@ -321,7 +321,9 @@ private fun ProductItem(
                     modifier = Modifier.height(30.dp)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_location),
                         colorFilter = ColorFilter.tint(AppColors.Orange),
@@ -330,7 +332,7 @@ private fun ProductItem(
                     )
                     Text(
                         text = "${product.store.remoteness} ${stringResource(R.string.km)}",
-                        style = TextStyle().main,
+                        style = Text.Style(Text.Size.Small).value,
                         modifier = Modifier.padding(start = IconStyle.padding.dp)
                     )
                 }
@@ -340,12 +342,12 @@ private fun ProductItem(
             ) {
                 Text(
                     text = "${product.price} ${stringResource(R.string.dollar)}",
-                    style = TextStyle(AppColors.Orange).big
+                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = "(${product.amount} ${stringResource(R.string.kg)})",
-                    style = TextStyle().main
+                    style = Text.Style(Text.Size.Small).value
                 )
             }
             Column {
@@ -357,7 +359,7 @@ private fun ProductItem(
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 Text(
                     text = "Exp: ${dateFormat.format(product.expirationDate)}",
-                    style = TextStyle().main
+                    style = Text.Style(Text.Size.Small).value
                 )
             }
         }
