@@ -1,21 +1,18 @@
 package com.perpetio.pricey.view_models
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.models.Product
 
 class BasketViewModel : ViewModel() {
-    val products = mutableStateListOf<Product>()
+    private val _basketList = mutableListOf<Product>()
+    val basketList: List<Product> = _basketList
 
-    fun addToBasket(newProducts: List<Product>) {
-        newProducts.forEach { newProduct ->
-            if (!products.contains(newProduct)) {
-                products.add(newProduct)
-            }
-        }
+    fun updateList(products: List<Product>) {
+        _basketList.clear()
+        _basketList.addAll(products)
     }
 
-    fun removeFromBasket(product: Product) {
-        products.remove(product)
+    fun removeFromList(extraProducts: List<Product>) {
+        _basketList.removeAll(extraProducts)
     }
 }

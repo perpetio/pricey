@@ -1,6 +1,5 @@
 package com.perpetio.pricey.view_models
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.data.DataProvider
@@ -11,16 +10,11 @@ import com.perpetio.pricey.models.ProductArticle
 
 class FilterViewModel : ViewModel() {
     val productArticle = mutableStateOf<ProductArticle?>(null)
-    val filter = mutableStateOf(Filter.values()[0])
-    val sortType = mutableStateOf(SortType.Descending)
-    val products: MutableState<List<Product>> by lazy {
-        mutableStateOf(getProducts())
-    }
 
     fun getProducts(
-        productArticle: ProductArticle = this.productArticle.value!!,
-        filter: Filter = this.filter.value,
-        sortType: SortType = this.sortType.value
+        filter: Filter,
+        sortType: SortType,
+        productArticle: ProductArticle = this.productArticle.value!!
     ): List<Product> {
         val products = DataProvider
             .getProducts(productArticle.name)

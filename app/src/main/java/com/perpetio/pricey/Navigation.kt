@@ -1,15 +1,13 @@
 package com.perpetio.pricey.view_models
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.Filter
+import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.ui.pages.AppPage
 import com.perpetio.pricey.ui.pages.BasketPage
 import com.perpetio.pricey.ui.pages.ComparisonPage
@@ -45,26 +43,29 @@ fun NavigationHost(
             route = AppPage.ComparisonPage.name
         ) {
             val filters = Filter.values().toList()
+            var selectedFilter by remember { mutableStateOf(filters[0]) }
+            var selectedSort by remember { mutableStateOf(SortType.Descending) }
             val productArticle by remember { filterViewModel.productArticle }
-            var selectedFilter by remember { filterViewModel.filter }
-            var selectedSort by remember { filterViewModel.sortType }
-            var products by remember { filterViewModel.products }
+            var products by remember {
+                mutableStateOf(filterViewModel.getProducts(selectedFilter, selectedSort))
+            }
             ComparisonPage(
                 productArticle = productArticle!!,
                 filters = filters,
                 selectedFilter = selectedFilter,
                 sortType = selectedSort,
                 products = products,
+                basketProducts = basketViewModel.basketList,
                 onCheckFilter = { filter ->
                     selectedFilter = filter
-                    products = filterViewModel.getProducts()
+                    products = filterViewModel.getProducts(selectedFilter, selectedSort)
                 },
                 onChangeSort = { sortType ->
                     selectedSort = sortType
-                    products = filterViewModel.getProducts()
+                    products = filterViewModel.getProducts(selectedFilter, selectedSort)
                 },
-                onAddToBasket = { product ->
-                    basketViewModel.addToBasket(product)
+                onUpdateBasket = { basketList ->
+                    basketViewModel.updateList(basketList)
                 },
                 onOpenFilter = {
                     navController.navigate(AppPage.BasketPage.name) // todo Open filter
@@ -78,9 +79,9 @@ fun NavigationHost(
             route = AppPage.BasketPage.name
         ) {
             BasketPage(
-                products = basketViewModel.products,
+                products = basketViewModel.basketList,
                 onProductRemove = { product ->
-                    basketViewModel.removeFromBasket(product)
+                    basketViewModel.removeFromList(listOf(product)) // todo
                 },
                 onGoBack = {
                     navController.navigate(AppPage.ListPage.name)

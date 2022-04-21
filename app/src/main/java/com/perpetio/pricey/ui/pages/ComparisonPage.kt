@@ -1,5 +1,7 @@
 package com.perpetio.pricey.ui.pages
 
+import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +11,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +44,7 @@ private fun Preview() {
         filters,
         filters[0],
         SortType.Descending,
+        listOf(),
         DataProvider.products,
         {},
         {},
@@ -55,18 +61,16 @@ fun ComparisonPage(
     selectedFilter: Filter,
     sortType: SortType,
     products: List<Product>,
+    basketProducts: List<Product>,
     onCheckFilter: (Filter) -> Unit,
     onChangeSort: (SortType) -> Unit,
-    onAddToBasket: (List<Product>) -> Unit,
+    onUpdateBasket: (List<Product>) -> Unit,
     onOpenFilter: () -> Unit,
     goBack: () -> Unit,
 ) {
-    var isSelectionMode by remember {
-        mutableStateOf(false)
-    }
-    val selectedProducts = remember {
-        mutableStateListOf<Product>()
-    }
+    var isSelectionMode by remember { mutableStateOf(false) }
+    val selectedProducts = remember { basketProducts.toMutableStateList() }
+    Log.d("123", "selectedProducts.addAll(basketProducts)")
     Column(
         Modifier.background(
             color = AppColors.LightOrange
@@ -95,7 +99,7 @@ fun ComparisonPage(
                 onOpenFilter = onOpenFilter,
                 onAddToBasket = {
                     isSelectionMode = false
-                    onAddToBasket(selectedProducts)
+                    onUpdateBasket(selectedProducts)
                 }
             )
         }
@@ -292,8 +296,6 @@ private fun ProductItem(
     isSelected: Boolean,
     onSelect: (Product) -> Unit
 ) {
-    val passiveColor = MaterialTheme.colors.surface
-    val activeColor = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
     Card(
         modifier = Modifier
             .padding(bottom = Plate.padding.dp)
@@ -301,7 +303,9 @@ private fun ProductItem(
             .fillMaxWidth(),
         elevation = Plate.elevation.dp,
         shape = RoundedCornerShape(Plate.corners.dp),
-        backgroundColor = if (isSelected) activeColor else passiveColor
+        border = if (isSelected) {
+            BorderStroke(LineStyle.size.dp, AppColors.Orange)
+        } else null
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -328,7 +332,7 @@ private fun ProductItem(
                         painter = painterResource(R.drawable.ic_location),
                         colorFilter = ColorFilter.tint(AppColors.Orange),
                         contentDescription = "Store chain image",
-                        modifier = Modifier.height(20.dp)
+                        modifier = Modifier.height(15.dp)
                     )
                     Text(
                         text = "${product.store.remoteness} ${stringResource(R.string.km)}",
@@ -355,7 +359,7 @@ private fun ProductItem(
                     currentValue = product.rating,
                     maxValue = Product.MAX_RATING
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(15.dp))
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 Text(
                     text = "Exp: ${dateFormat.format(product.expirationDate)}",
@@ -381,7 +385,7 @@ private fun Rating(
                 colorFilter = ColorFilter.tint(AppColors.Orange),
                 contentDescription = "Rating star",
                 modifier = Modifier
-                    .height(15.dp)
+                    .height(12.dp)
                     .padding(end = 10.dp)
             )
         }
