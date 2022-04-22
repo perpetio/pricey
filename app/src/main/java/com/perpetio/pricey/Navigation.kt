@@ -68,7 +68,7 @@ fun NavigationHost(
                     basketViewModel.addToBasket(newProducts)
                 },
                 onOpenFilter = {
-                    navController.navigate(AppPage.BasketPage.name) // todo Open filter
+                    // navController.navigate(AppPage.BasketPage.name) // todo Open filter
                 },
                 goBack = {
                     navController.popBackStack()
@@ -78,10 +78,13 @@ fun NavigationHost(
         composable(
             route = AppPage.BasketPage.name
         ) {
+            val basketList by remember {
+                mutableStateOf(basketViewModel.basketList)
+            }
             BasketPage(
-                basketList = basketViewModel.basketList,
-                onProductRemove = { product ->
-                    basketViewModel.removeFromList(listOf(product)) // todo
+                basketList = basketList,
+                onProductRemove = {
+                    //basketViewModel.removeFromList(listOf(product)) // todo
                 },
                 goBack = {
                     navController.navigate(AppPage.ListPage.name)

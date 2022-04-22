@@ -11,12 +11,7 @@ class BasketViewModel : ViewModel() {
     fun addToBasket(products: List<Product>) {
         products.forEach { product ->
             if (!_basketList.contains(product)) {
-                _basketList.add(
-                    Product(
-                        amount = 1.0,
-                        data = product
-                    )
-                )
+                _basketList.add(product)
             }
         }
     }
