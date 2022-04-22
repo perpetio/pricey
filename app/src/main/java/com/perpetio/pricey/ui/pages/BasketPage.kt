@@ -17,10 +17,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
+import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.theme.*
@@ -28,10 +30,14 @@ import com.perpetio.pricey.ui.theme.*
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    BasketPage(
-        emptyList(),
-        {},
-        {}
+//    BasketPage(
+//        emptyList(),
+//        {},
+//        {}
+//    )
+    StoreItem(
+        store = DataProvider.stores[0],
+        products = DataProvider.products
     )
 }
 
@@ -95,7 +101,7 @@ private fun ListOfStores(
                 products = mutableListOf()
             } else products.add(product)
         }
-        if(products.isNotEmpty()) {
+        if (products.isNotEmpty()) {
             item {
                 StoreItem(
                     store = products.first().store,
@@ -118,7 +124,9 @@ private fun StoreItem(
     Column(
         modifier = Modifier.padding(20.dp)
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
             Image(
                 painter = painterResource(store.chain.imageResId),
                 contentDescription = "Store chain image",
@@ -128,8 +136,7 @@ private fun StoreItem(
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${store.remoteness} ${stringResource(R.string.km)}",
-                style = Text.Style(Text.Size.Max, AppColors.Orange).value,
-                modifier = Modifier.padding(Plate.padding.dp)
+                style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value
             )
         }
         Divider(
@@ -146,13 +153,14 @@ private fun StoreItem(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.total),
-                style = Text.Style(Text.Size.Bold).value,
+                style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value,
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = "${total} ${stringResource(R.string.dollar)}",
                 style = Text.Style(Text.Size.Title, AppColors.Orange).value,
@@ -168,7 +176,7 @@ private fun ListOfProducts(
     onAmountIncrease: (Product) -> Unit,
     onAmountDecrease: (Product) -> Unit,
 ) {
-    LazyRow {
+    LazyColumn {
         items(
             items = products,
             itemContent = { product ->
@@ -190,17 +198,16 @@ private fun ProductItem(
     onAmountIncrease: (Product) -> Unit,
     onAmountDecrease: (Product) -> Unit,
 ) {
-    Row {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
         Text(
             text = product.article.name,
-            style = Text.Style(Text.Size.Bold).value
+            style = Text.Style(Text.Size.Bold).value,
+            modifier = Modifier.weight(25f)
         )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "-",
-            style = Text.Style(Text.Size.Max, AppColors.Orange).value,
-            modifier = Modifier.padding(Plate.padding.dp)
-        )
+        Spacer(modifier = Modifier.weight(15f))
         Image(
             painter = painterResource(
                 if (product.amount > 0) {
@@ -219,7 +226,8 @@ private fun ProductItem(
         )
         Text(
             text = "${product.amount} ${stringResource(R.string.kg)}",
-            style = Text.Style(Text.Size.Bold).value
+            style = Text.Style(Text.Size.Bold).value,
+            modifier = Modifier.weight(20f)
         )
         Image(
             painter = painterResource(R.drawable.ic_plus),
@@ -231,10 +239,12 @@ private fun ProductItem(
                     onAmountIncrease(product)
                 }
         )
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(15f))
         Text(
             text = "${product.price} ${stringResource(R.string.dollar)}",
-            style = Text.Style(Text.Size.Bold, AppColors.Orange).value
+            style = Text.Style(Text.Size.Bold, AppColors.Orange).value,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(25f)
         )
     }
 }
