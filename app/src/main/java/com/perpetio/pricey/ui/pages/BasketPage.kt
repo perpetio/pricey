@@ -1,13 +1,11 @@
 package com.perpetio.pricey.ui.pages
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.theme.*
@@ -30,14 +27,10 @@ import com.perpetio.pricey.ui.theme.*
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-//    BasketPage(
-//        emptyList(),
-//        {},
-//        {}
-//    )
-    StoreItem(
-        store = DataProvider.stores[0],
-        products = DataProvider.products
+    BasketPage(
+        emptyList(),
+        {},
+        {}
     )
 }
 
@@ -86,44 +79,75 @@ private fun ListOfStores(
     ) {
         var store: Store? = null
         var products = mutableListOf<Product>()
-        Log.d("123", "Basket list: $basketList")
         basketList.sortedBy { it.store.chain.name }.forEach { product ->
             if (store != product.store) {
                 store?.let {
-                    item {
-                        StoreItem(
-                            store = it,
-                            products = products
-                        )
+                    var total = 0.0
+                    products.forEach { product ->
+                        total += product.price * product.amount
                     }
+                    storeItem(
+                        store = it,
+                        products = products,
+                        total = total,
+                        scope = this
+                    )
+                    products = mutableListOf()
                 }
                 store = product.store
-                products = mutableListOf()
-            } else products.add(product)
-        }
-        if (products.isNotEmpty()) {
-            item {
-                StoreItem(
-                    store = products.first().store,
-                    products = products
-                )
             }
+            products.add(product)
+        }
+        store?.let {
+            var total = 0.0
+            products.forEach { product ->
+                total += product.price * product.amount
+            }
+            storeItem(
+                store = it,
+                products = products,
+                total = total,
+                scope = this
+            )
+        }
+    }
+}
+
+private fun storeItem(
+    store: Store,
+    products: List<Product>,
+    total: Double,
+    scope: LazyListScope
+) {
+    scope.apply {
+        item {
+            Spacer(modifier = Modifier.padding(10.dp))
+            StoreTitle(store)
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+        products.forEach { product ->
+            item {
+                ProductItem(
+                    product = product,
+                    onProductRemove = {},
+                    onAmountIncrease = {},
+                    onAmountDecrease = {}
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }
+        item {
+            TotalCost(total)
+            Spacer(modifier = Modifier.padding(10.dp))
         }
     }
 }
 
 @Composable
-private fun StoreItem(
-    store: Store,
-    products: List<Product>
+private fun StoreTitle(
+    store: Store
 ) {
-    var total = 0.0
-    products.forEach { product ->
-        total += product.price * product.amount
-    }
-    Column(
-        modifier = Modifier.padding(20.dp)
-    ) {
+    Column {
         Row(
             verticalAlignment = Alignment.Bottom
         ) {
@@ -142,51 +166,6 @@ private fun StoreItem(
         Divider(
             color = AppColors.Gray,
             thickness = 1.dp
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        ListOfProducts(
-            products = products,
-            onProductRemove = {},
-            onAmountIncrease = {},
-            onAmountDecrease = {}
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(R.string.total),
-                style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value,
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = "${total} ${stringResource(R.string.dollar)}",
-                style = Text.Style(Text.Size.Title, AppColors.Orange).value,
-            )
-        }
-    }
-}
-
-@Composable
-private fun ListOfProducts(
-    products: List<Product>,
-    onProductRemove: (Product) -> Unit,
-    onAmountIncrease: (Product) -> Unit,
-    onAmountDecrease: (Product) -> Unit,
-) {
-    LazyColumn {
-        items(
-            items = products,
-            itemContent = { product ->
-                ProductItem(
-                    product = product,
-                    onProductRemove = onProductRemove,
-                    onAmountIncrease = onAmountIncrease,
-                    onAmountDecrease = onAmountDecrease,
-                )
-            }
         )
     }
 }
@@ -207,7 +186,7 @@ private fun ProductItem(
             style = Text.Style(Text.Size.Bold).value,
             modifier = Modifier.weight(25f)
         )
-        Spacer(modifier = Modifier.weight(15f))
+        Spacer(modifier = Modifier.weight(10f))
         Image(
             painter = painterResource(
                 if (product.amount > 0) {
@@ -227,7 +206,7 @@ private fun ProductItem(
         Text(
             text = "${product.amount} ${stringResource(R.string.kg)}",
             style = Text.Style(Text.Size.Bold).value,
-            modifier = Modifier.weight(20f)
+            modifier = Modifier.weight(30f)
         )
         Image(
             painter = painterResource(R.drawable.ic_plus),
@@ -239,12 +218,34 @@ private fun ProductItem(
                     onAmountIncrease(product)
                 }
         )
-        Spacer(modifier = Modifier.weight(15f))
+        Spacer(modifier = Modifier.weight(10f))
+        val total = product.price * product.amount
         Text(
-            text = "${product.price} ${stringResource(R.string.dollar)}",
+            text = "$total ${stringResource(R.string.dollar)}",
             style = Text.Style(Text.Size.Bold, AppColors.Orange).value,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(25f)
+        )
+    }
+}
+
+@Composable
+private fun TotalCost(
+    total: Double
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.total),
+            style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value,
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = "${total} ${stringResource(R.string.dollar)}",
+            style = Text.Style(Text.Size.Title, AppColors.Orange).value,
         )
     }
 }
