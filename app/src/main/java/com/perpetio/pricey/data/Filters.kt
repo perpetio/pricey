@@ -19,3 +19,17 @@ enum class SortType {
         } else Ascending
     }
 }
+
+object RatingStarts {
+    const val min = 0
+    const val max = 5
+}
+
+enum class ExpirationPeriod(
+    val days: Int
+) {
+    UpTo2(2),
+    UpTo7(7),
+    UpTo13(13),
+    StartWith14(14),
+}

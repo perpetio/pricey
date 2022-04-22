@@ -76,6 +76,7 @@ fun NavigationHost(
             route = AppPage.FilterPage.name
         ) {
             FilterPage(
+                productArticle = filterViewModel.productArticle.value!!,
                 goBack = {
                     navController.popBackStack()
                 }
@@ -93,7 +94,7 @@ fun NavigationHost(
                     //basketViewModel.removeFromList(listOf(product)) // todo
                 },
                 goBack = {
-                    navController.navigate(AppPage.ListPage.name)
+                    navController.popBackStack()
                 }
             )
         }

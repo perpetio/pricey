@@ -14,6 +14,10 @@
     <string name="dollar">$</string>
     <string name="kg">kg</string>
 
+    <!-- Filter page -->
+    <string name="min">min</string>
+    <string name="apply">Apply</string>
+
     <!-- Basket page -->
     <string name="cart">Cart</string>
     <string name="total">Total</string>
