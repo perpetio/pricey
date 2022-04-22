@@ -8,10 +8,7 @@ import androidx.navigation.compose.composable
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.Filter
 import com.perpetio.pricey.data.SortType
-import com.perpetio.pricey.ui.pages.AppPage
-import com.perpetio.pricey.ui.pages.BasketPage
-import com.perpetio.pricey.ui.pages.ComparisonPage
-import com.perpetio.pricey.ui.pages.ListPage
+import com.perpetio.pricey.ui.pages.*
 
 @Composable
 fun NavigationHost(
@@ -68,8 +65,17 @@ fun NavigationHost(
                     basketViewModel.addToBasket(newProducts)
                 },
                 onOpenFilter = {
-                    // navController.navigate(AppPage.BasketPage.name) // todo Open filter
+                    navController.navigate(AppPage.FilterPage.name)
                 },
+                goBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            route = AppPage.FilterPage.name
+        ) {
+            FilterPage(
                 goBack = {
                     navController.popBackStack()
                 }

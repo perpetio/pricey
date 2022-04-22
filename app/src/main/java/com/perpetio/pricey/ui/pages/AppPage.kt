@@ -9,6 +9,7 @@ enum class AppPage(
         iconResId = R.drawable.ic_home
     ),
     ComparisonPage,
+    FilterPage,
     BasketPage(
         iconResId =R.drawable.ic_basket
     );
@@ -18,6 +19,7 @@ enum class AppPage(
             when (route?.substringBefore("/")) {
                 ListPage.name -> ListPage
                 ComparisonPage.name -> ComparisonPage
+                FilterPage.name -> FilterPage
                 BasketPage.name -> BasketPage
                 else -> ListPage
             }
