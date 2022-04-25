@@ -2,11 +2,9 @@ package com.perpetio.pricey.ui.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -23,15 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
-import com.perpetio.pricey.models.Product
+import com.perpetio.pricey.models.BasketProduct
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.AppColors
-import com.perpetio.pricey.ui.theme.ButtonStyle
 import com.perpetio.pricey.ui.theme.SpaceStyle
 import com.perpetio.pricey.ui.theme.Text
-
-const val BASE_AMOUNT = 1.0
 
 @Preview(showBackground = true)
 @Composable
@@ -44,7 +39,7 @@ private fun Preview() {
 //        {}
 //    )
     ProductItem(
-        product = DataProvider.products[0],
+        product = BasketProduct(DataProvider.products[0]),
         onAmountUpdate = {},
         onProductRemove = {},
     )
@@ -52,8 +47,8 @@ private fun Preview() {
 
 @Composable
 fun BasketPage(
-    basketList: List<Product>,
-    onProductRemove: () -> Unit,
+    basketList: List<BasketProduct>,
+    onProductRemove: (BasketProduct) -> Unit,
     goBack: () -> Unit
 ) {
     Column(
@@ -85,14 +80,14 @@ fun BasketPage(
 
 @Composable
 private fun BasketList(
-    basketList: List<Product>,
-    onProductRemove: () -> Unit
+    basketList: List<BasketProduct>,
+    onProductRemove: (BasketProduct) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
         var store: Store? = null
-        var products = mutableListOf<Product>()
+        var products = mutableListOf<BasketProduct>()
         basketList.sortedBy { it.store.chain.name }.forEach { product ->
             if (store != product.store) {
                 store?.let {
@@ -121,8 +116,8 @@ private fun BasketList(
 
 private fun storeItem(
     store: Store,
-    products: List<Product>,
-    onProductRemove: () -> Unit,
+    products: List<BasketProduct>,
+    onProductRemove: (BasketProduct) -> Unit,
     scope: LazyListScope
 ) {
     var total by mutableStateOf(getTotal(products))
@@ -152,11 +147,13 @@ private fun storeItem(
 }
 
 private fun getTotal(
-    products: List<Product>
+    products: List<BasketProduct>
 ): Double {
     var total = 0.0
     products.forEach { product ->
-        total += product.price * BASE_AMOUNT
+        product.apply {
+            total += price * selectedAmount
+        }
     }
     return total
 }
@@ -190,11 +187,11 @@ private fun StoreTitle(
 
 @Composable
 private fun ProductItem(
-    product: Product,
+    product: BasketProduct,
     onAmountUpdate: (Int) -> Unit,
-    onProductRemove: () -> Unit,
+    onProductRemove: (BasketProduct) -> Unit,
 ) {
-    var amount by remember { mutableStateOf(BASE_AMOUNT) }
+    var amount by remember { mutableStateOf(product.selectedAmount) }
     val deltaAmount = 1
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -210,10 +207,12 @@ private fun ProductItem(
             modifier = Modifier.size(30.dp),
             onClick = {
                 if (amount - deltaAmount < 0) {
-                    amount = 0.0
-                    onProductRemove()
+                    product.selectedAmount = 0.0
+                    amount = product.selectedAmount
+                    onProductRemove(product)
                 } else {
-                    amount -= deltaAmount
+                    product.selectedAmount -= deltaAmount
+                    amount = product.selectedAmount
                     onAmountUpdate(-deltaAmount)
                 }
             }
@@ -242,9 +241,11 @@ private fun ProductItem(
             enabled = (amount < product.amount),
             onClick = {
                 if (amount + deltaAmount > product.amount) {
-                    amount = product.amount
+                    product.selectedAmount = product.amount
+                    amount = product.selectedAmount
                 } else {
-                    amount += deltaAmount
+                    product.selectedAmount += deltaAmount
+                    amount = product.selectedAmount
                     onAmountUpdate(deltaAmount)
                 }
             }

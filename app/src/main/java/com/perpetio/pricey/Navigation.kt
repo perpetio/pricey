@@ -124,13 +124,15 @@ fun NavigationHost(
         composable(
             route = AppPage.BasketPage.name
         ) {
-            val basketList by remember {
+            var basketList by remember {
                 mutableStateOf(basketViewModel.basketList)
             }
             BasketPage(
                 basketList = basketList,
-                onProductRemove = {
-                    //basketViewModel.removeFromList(listOf(product)) // todo
+                onProductRemove = { product ->
+                    val copy = basketList.toMutableList()
+                    copy.remove(product)
+                    basketList = copy
                 },
                 goBack = {
                     navController.popBackStack()
