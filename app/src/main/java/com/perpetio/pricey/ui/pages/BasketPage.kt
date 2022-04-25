@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -24,6 +25,7 @@ import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.Store
+import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.ButtonStyle
 import com.perpetio.pricey.ui.theme.SpaceStyle
@@ -63,15 +65,9 @@ fun BasketPage(
                 .fillMaxWidth()
                 .padding(SpaceStyle.main.dp),
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = "Button back",
-                colorFilter = ColorFilter.tint(AppColors.Orange),
-                modifier = Modifier
-                    .size(ButtonStyle.size.dp)
-                    .padding(ButtonStyle.padding.dp)
-                    .align(Alignment.CenterStart)
-                    .clickable { goBack() }
+            BackButton(
+                modifier = Modifier.align(Alignment.TopStart),
+                goBack = goBack
             )
             Text(
                 text = stringResource(R.string.cart),

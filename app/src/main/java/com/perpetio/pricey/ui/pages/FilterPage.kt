@@ -22,6 +22,7 @@ import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
+import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Plate
 import com.perpetio.pricey.ui.theme.SpaceStyle
@@ -96,23 +97,10 @@ private fun Header(
         Box(
             modifier = Modifier.padding(SpaceStyle.main.dp),
         ) {
-            IconButton(
-                modifier = Modifier
-                    .padding(
-                        start = 10.dp,
-                        top = 10.dp
-                    )
-                    .size(30.dp)
-                    .align(Alignment.TopStart),
-                onClick = { goBack() }
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = "Button back",
-                    colorFilter = ColorFilter.tint(AppColors.Orange),
-                    modifier = Modifier.size(20.dp)
-                )
-            }
+            BackButton(
+                modifier = Modifier.align(Alignment.TopStart),
+                goBack = goBack
+            )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

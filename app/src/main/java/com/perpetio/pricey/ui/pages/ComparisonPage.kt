@@ -12,10 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +29,7 @@ import com.perpetio.pricey.data.Filter
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
+import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -135,15 +133,9 @@ private fun Header(
         Box(
             modifier = Modifier.padding(SpaceStyle.main.dp),
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = "Button back",
-                colorFilter = ColorFilter.tint(AppColors.Orange),
-                modifier = Modifier
-                    .size(ButtonStyle.size.dp)
-                    .padding(ButtonStyle.padding.dp)
-                    .clickable { goBack() }
-                    .align(Alignment.TopStart)
+            BackButton(
+                modifier = Modifier.align(Alignment.TopStart),
+                goBack = goBack
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
