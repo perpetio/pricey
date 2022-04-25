@@ -26,10 +26,10 @@ object RatingStarts {
 }
 
 enum class ExpirationPeriod(
-    val days: Int
+    val rangeInDays: String
 ) {
-    UpTo2(2),
-    UpTo7(7),
-    UpTo13(13),
-    StartWith14(14),
+    UpTo2("0-2"),
+    UpTo7("3-7"),
+    UpTo13("8-13"),
+    StartWith14("14+"),
 }
