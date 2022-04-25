@@ -7,20 +7,24 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -90,10 +94,9 @@ fun BottomBar(
                 .background(AppColors.Gray)
         )
         Row(
-            modifier = Modifier
-                .selectableGroup()
-                .height(TabHeight),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.height(TabHeight),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             allPages.forEach { page ->
                 page.iconResId?.let { iconResId ->
@@ -125,23 +128,18 @@ private fun TabItem(
         targetValue = if (selected) AppColors.Orange else AppColors.DarkGray,
         animationSpec = animSpec
     )
-    Icon(
-        painter = painterResource(iconResId),
-        contentDescription = "Tab icon",
-        tint = tabTintColor,
+    IconButton(
         modifier = Modifier
-            .padding(Plate.padding.dp)
-            .animateContentSize()
-            .height(TabHeight)
-            .selectable(
-                selected = selected,
-                onClick = onSelected,
-                role = Role.Tab,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple()
-            )
-    )
+            .size(30.dp),
+        onClick = { onSelected() }
+    ) {
+        Image(
+            painter = painterResource(iconResId),
+            colorFilter = ColorFilter.tint(tabTintColor),
+            contentDescription = "Tab icon",
+            modifier = Modifier.size(20.dp)
+        )
+    }
 }
 
 private val TabHeight = 56.dp
-private const val InactiveTabOpacity = 0.60f
