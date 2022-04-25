@@ -25,11 +25,33 @@ fun NavigationHost(
         composable(
             route = AppPage.ListPage.name
         ) {
+            var searchQuery by remember {
+                mutableStateOf("")
+            }
+            var selectedCategory by remember {
+                mutableStateOf(DataProvider.foodCategories[0])
+            }
+            var productArticles by remember {
+                mutableStateOf(
+                    filterViewModel.searchOfProductArticles(searchQuery, selectedCategory)
+                )
+            }
             ListPage(
                 foodCategories = DataProvider.foodCategories,
-                productArticles = DataProvider.productArticles,
-                onProductSearch = {},
-                onCategorySelect = {},
+                selectedCategory = selectedCategory,
+                productArticles = productArticles,
+                onSearchChange = { query ->
+                    searchQuery = query
+                    productArticles = filterViewModel.searchOfProductArticles(
+                        searchQuery, selectedCategory
+                    )
+                },
+                onCategoryChange = { foodCategory ->
+                    selectedCategory = foodCategory
+                    productArticles = filterViewModel.searchOfProductArticles(
+                        searchQuery, selectedCategory
+                    )
+                },
                 onProductSelect = { productArticle ->
                     filterViewModel.productArticle.value = productArticle
                     navController.navigate(AppPage.ComparisonPage.name)
@@ -44,7 +66,7 @@ fun NavigationHost(
             var selectedSort by remember { mutableStateOf(SortType.Descending) }
             val productArticle by remember { filterViewModel.productArticle }
             var products by remember {
-                mutableStateOf(filterViewModel.getProducts(selectedFilter, selectedSort))
+                mutableStateOf(filterViewModel.filterProducts(selectedFilter, selectedSort))
             }
             ComparisonPage(
                 productArticle = productArticle!!,
@@ -55,11 +77,11 @@ fun NavigationHost(
                 basketProducts = basketViewModel.basketList,
                 onCheckFilter = { filter ->
                     selectedFilter = filter
-                    products = filterViewModel.getProducts(selectedFilter, selectedSort)
+                    products = filterViewModel.filterProducts(selectedFilter, selectedSort)
                 },
                 onChangeSort = { sortType ->
                     selectedSort = sortType
-                    products = filterViewModel.getProducts(selectedFilter, selectedSort)
+                    products = filterViewModel.filterProducts(selectedFilter, selectedSort)
                 },
                 onUpdateBasket = { newProducts ->
                     basketViewModel.addToBasket(newProducts)

@@ -51,14 +51,4 @@ object DataProvider {
         Product(productArticles[0], stores[7], 3,8.0, 7.0, DateManager.dateFromNow(3)),
         Product(productArticles[0], stores[8], 4,10.0, 12.0, DateManager.dateFromNow(5)),
     )
-
-    fun getProducts(name: String): List<Product> {
-        val result = mutableListOf<Product>()
-        products.forEach { product ->
-            if (product.article.name == name) {
-                result.add(product)
-            }
-        }
-        return result
-    }
 }

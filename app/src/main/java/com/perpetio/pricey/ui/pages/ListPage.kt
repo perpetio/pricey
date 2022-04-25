@@ -25,31 +25,30 @@ import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.theme.*
 
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-    ListPage(
-        DataProvider.foodCategories,
-        DataProvider.productArticles,
-        {},
-        {},
-        {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun Preview() {
+//    ListPage(
+//        DataProvider.foodCategories,
+//        DataProvider.foodCategories[0],
+//        DataProvider.productArticles,
+//        {},
+//        {},
+//        {}
+//    )
+//}
 
 @Composable
 fun ListPage(
     foodCategories: List<FoodCategory>,
+    selectedCategory: FoodCategory,
     productArticles: List<ProductArticle>,
-    onProductSearch: (String) -> Unit,
-    onCategorySelect: (FoodCategory) -> Unit,
+    onSearchChange: (String) -> Unit,
+    onCategoryChange: (FoodCategory) -> Unit,
     onProductSelect: (ProductArticle) -> Unit,
 ) {
     var searchQuery by remember {
         mutableStateOf("")
-    }
-    var selectedCategory by remember {
-        mutableStateOf(foodCategories[0])
     }
     Column(
         Modifier.background(
@@ -60,7 +59,7 @@ fun ListPage(
             searchQuery = searchQuery,
             onSearchChange = { query ->
                 searchQuery = query
-                onProductSearch(query)
+                onSearchChange(query)
             }
         )
         Text(
@@ -71,10 +70,7 @@ fun ListPage(
         ListOfCategories(
             foodCategories = foodCategories,
             selectedCategory = selectedCategory,
-            onCategorySelect = { foodCategory ->
-                selectedCategory = foodCategory
-                onCategorySelect(foodCategory)
-            }
+            onCategoryChange = onCategoryChange
         )
         Text(
             text = selectedCategory.name,
@@ -100,7 +96,7 @@ private fun SearchField(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { onSearchChange(it) },
-            textStyle = Text.Style(Text.Size.Small).value,
+            textStyle = Text.Style(Text.Size.Main).value,
             singleLine = true,
             label = {
                 Text(
@@ -108,16 +104,16 @@ private fun SearchField(
                     style = Text.Style(Text.Size.Main, AppColors.Gray).value
                 )
             },
-            modifier = Modifier
-                .background(MaterialTheme.colors.surface)
-                .fillMaxWidth(),
             shape = RoundedCornerShape(Plate.corners.dp),
             colors = outlinedTextFieldColors(
                 unfocusedBorderColor = AppColors.Orange,
                 focusedBorderColor = AppColors.Orange
             ),
             leadingIcon = { if (searchQuery.isEmpty()) SearchIcon() },
-            trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() }
+            trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() },
+            modifier = Modifier
+                .background(MaterialTheme.colors.surface)
+                .fillMaxWidth(),
         )
     }
 }
@@ -136,7 +132,7 @@ private fun SearchIcon() {
 private fun ListOfCategories(
     foodCategories: List<FoodCategory>,
     selectedCategory: FoodCategory,
-    onCategorySelect: (FoodCategory) -> Unit,
+    onCategoryChange: (FoodCategory) -> Unit,
 ) {
     val items = remember { foodCategories }
     LazyRow(
@@ -151,7 +147,7 @@ private fun ListOfCategories(
                 CategoryItem(
                     category = category,
                     isSelected = (category == selectedCategory),
-                    onSelect = onCategorySelect
+                    onSelect = onCategoryChange
                 )
             }
         )
@@ -204,7 +200,6 @@ private fun ListOfProducts(
     productArticles: List<ProductArticle>,
     onProductSelect: (ProductArticle) -> Unit,
 ) {
-    val items = remember { productArticles }
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -212,7 +207,7 @@ private fun ListOfProducts(
         )
     ) {
         items(
-            items = items,
+            items = productArticles,
             itemContent = { product ->
                 ProductItem(
                     productArticle = product,
