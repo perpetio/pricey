@@ -135,6 +135,7 @@ fun NavigationHost(
                     basketList = copy
                 },
                 goBack = {
+                    basketViewModel.updateBasketList(basketList.toList())
                     navController.popBackStack()
                 }
             )

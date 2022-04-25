@@ -17,4 +17,9 @@ class BasketViewModel : ViewModel() {
             }
         }
     }
+
+    fun updateBasketList(newList: List<BasketProduct>) {
+        _basketList.clear()
+        _basketList.addAll(newList)
+    }
 }

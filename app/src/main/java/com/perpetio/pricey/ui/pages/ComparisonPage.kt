@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.Filter
+import com.perpetio.pricey.data.RatingStarts
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
@@ -363,7 +364,7 @@ private fun ProductItem(
                 Column {
                     Rating(
                         currentValue = product.rating,
-                        maxValue = Product.MAX_RATING
+                        maxValue = RatingStarts.max
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

@@ -17,33 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.BasketProduct
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.SpaceStyle
 import com.perpetio.pricey.ui.theme.Text
-
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-//    BasketPage(
-//        emptyList(),
-//        {},
-//        {},
-//        {},
-//        {}
-//    )
-    ProductItem(
-        product = BasketProduct(DataProvider.products[0]),
-        onAmountUpdate = {},
-        onProductRemove = {},
-    )
-}
 
 @Composable
 fun BasketPage(
@@ -128,13 +109,18 @@ private fun storeItem(
             Spacer(modifier = Modifier.height(10.dp))
         }
         products.forEach { product ->
+            var basketAmount by mutableStateOf(product.basketAmount)
             item {
                 ProductItem(
                     product = product,
-                    onAmountUpdate = { deltaAmount ->
-                        total += deltaAmount * product.price
+                    basketAmount = basketAmount,
+                    onAmountUpdate = { newAmount ->
+                        total -= basketAmount * product.price
+                        total += newAmount * product.price
+                        basketAmount = newAmount
+                        product.basketAmount = newAmount
                     },
-                    onProductRemove = onProductRemove,
+                    onProductRemove = onProductRemove
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -152,7 +138,7 @@ private fun getTotal(
     var total = 0.0
     products.forEach { product ->
         product.apply {
-            total += price * selectedAmount
+            total += price * basketAmount
         }
     }
     return total
@@ -188,10 +174,10 @@ private fun StoreTitle(
 @Composable
 private fun ProductItem(
     product: BasketProduct,
-    onAmountUpdate: (Int) -> Unit,
+    basketAmount: Double,
+    onAmountUpdate: (Double) -> Unit,
     onProductRemove: (BasketProduct) -> Unit,
 ) {
-    var amount by remember { mutableStateOf(product.selectedAmount) }
     val deltaAmount = 1
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -206,54 +192,45 @@ private fun ProductItem(
         IconButton(
             modifier = Modifier.size(30.dp),
             onClick = {
-                if (amount - deltaAmount < 0) {
-                    product.selectedAmount = 0.0
-                    amount = product.selectedAmount
+                if (basketAmount == 0.0) {
                     onProductRemove(product)
-                } else {
-                    product.selectedAmount -= deltaAmount
-                    amount = product.selectedAmount
-                    onAmountUpdate(-deltaAmount)
-                }
+                } else if (basketAmount - deltaAmount < 0) {
+                    onAmountUpdate(0.0)
+                } else onAmountUpdate(basketAmount - deltaAmount)
             }
         ) {
             Image(
                 painter = painterResource(
-                    if (amount > 0) {
+                    if (basketAmount > 0) {
                         R.drawable.ic_minus
                     } else R.drawable.ic_delete
                 ),
                 colorFilter = ColorFilter.tint(AppColors.Orange),
                 contentDescription = "Button minus",
                 modifier = Modifier.size(
-                    if (amount > 0) 15.dp else 20.dp
+                    if (basketAmount > 0) 15.dp else 20.dp
                 )
             )
         }
         Text(
-            text = "$amount ${stringResource(R.string.kg)}",
+            text = "$basketAmount ${stringResource(R.string.kg)}",
             style = Text.Style(Text.Size.Bold).value,
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(30f)
         )
         IconButton(
             modifier = Modifier.size(30.dp),
-            enabled = (amount < product.amount),
+            enabled = (basketAmount < product.amount),
             onClick = {
-                if (amount + deltaAmount > product.amount) {
-                    product.selectedAmount = product.amount
-                    amount = product.selectedAmount
-                } else {
-                    product.selectedAmount += deltaAmount
-                    amount = product.selectedAmount
-                    onAmountUpdate(deltaAmount)
-                }
+                if (basketAmount + deltaAmount > product.amount) {
+                    onAmountUpdate(product.amount)
+                } else onAmountUpdate(basketAmount + deltaAmount)
             }
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_plus),
                 colorFilter = ColorFilter.tint(
-                    if (amount < product.amount) {
+                    if (basketAmount < product.amount) {
                         AppColors.Orange
                     } else AppColors.Gray
                 ),
@@ -263,7 +240,7 @@ private fun ProductItem(
         }
         Spacer(modifier = Modifier.weight(10f))
         Text(
-            text = "${amount * product.price} ${stringResource(R.string.dollar)}",
+            text = "${basketAmount * product.price} ${stringResource(R.string.dollar)}",
             style = Text.Style(Text.Size.Bold, AppColors.Orange).value,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(25f)
