@@ -1,8 +1,11 @@
 package com.perpetio.pricey.ui.pages
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -18,7 +22,10 @@ import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.theme.*
+import com.perpetio.pricey.ui.theme.AppColors
+import com.perpetio.pricey.ui.theme.Plate
+import com.perpetio.pricey.ui.theme.SpaceStyle
+import com.perpetio.pricey.ui.theme.Text
 import com.perpetio.pricey.utils.toPrice
 
 @Preview(showBackground = true)
@@ -89,16 +96,23 @@ private fun Header(
         Box(
             modifier = Modifier.padding(SpaceStyle.main.dp),
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = "Button back",
-                colorFilter = ColorFilter.tint(AppColors.Orange),
+            IconButton(
                 modifier = Modifier
-                    .size(ButtonStyle.size.dp)
-                    .padding(ButtonStyle.padding.dp)
-                    .clickable { goBack() }
-                    .align(Alignment.TopStart)
-            )
+                    .padding(
+                        start = 10.dp,
+                        top = 10.dp
+                    )
+                    .size(30.dp)
+                    .align(Alignment.TopStart),
+                onClick = { goBack() }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = "Button back",
+                    colorFilter = ColorFilter.tint(AppColors.Orange),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -189,9 +203,13 @@ private fun RatingFilter(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
+        var selectedRating by remember { mutableStateOf(filterRating) }
         Rating(
-            currentValue = filterRating,
-            maxValue = maxRating
+            selectedValue = selectedRating,
+            maxValue = maxRating,
+            onSelect = { rating ->
+                selectedRating = rating
+            }
         )
     }
 }
@@ -233,14 +251,16 @@ private fun ApplyButton(
 ) {
     Button(
         onClick = { /*TODO*/ },
+        shape = RoundedCornerShape(Plate.corners.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = AppColors.Orange
-        ),
-        modifier = modifier
+        )
     ) {
         Text(
             text = stringResource(R.string.apply),
-            style = Text.Style(Text.Size.Bold, Color.White).value
+            style = Text.Style(Text.Size.Bold, Color.White).value,
+            textAlign = TextAlign.Center,
+            modifier = modifier.padding(5.dp)
         )
     }
 }
@@ -328,9 +348,7 @@ private fun ExpirationRange(
                         selectedColor = AppColors.Orange,
                         unselectedColor = AppColors.Orange
                     ),
-                    modifier = Modifier
-                        .height(20.dp)
-                        .padding(end = 20.dp)
+                    modifier = Modifier.size(30.dp)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
@@ -338,28 +356,34 @@ private fun ExpirationRange(
                     style = Text.Style(Text.Size.Main).value
                 )
             }
+            Spacer(modifier = Modifier.width(20.dp))
         }
     }
 }
 
 @Composable
 private fun Rating(
-    currentValue: Int,
-    maxValue: Int
+    selectedValue: Int,
+    maxValue: Int,
+    onSelect: (Int) -> Unit
 ) {
     Row {
-        for (tmpValue in 1..maxValue) {
-            Image(
-                painter = painterResource(
-                    if (tmpValue <= currentValue) R.drawable.ic_start
-                    else R.drawable.ic_unstart
-                ),
-                colorFilter = ColorFilter.tint(AppColors.Orange),
-                contentDescription = "Rating star",
-                modifier = Modifier
-                    .height(20.dp)
-                    .padding(end = 20.dp)
-            )
+        for (value in 1..maxValue) {
+            IconButton(
+                modifier = Modifier.size(30.dp),
+                onClick = { onSelect(value) }
+            ) {
+                Image(
+                    painter = painterResource(
+                        if (value <= selectedValue) R.drawable.ic_start
+                        else R.drawable.ic_unstart
+                    ),
+                    colorFilter = ColorFilter.tint(AppColors.Orange),
+                    contentDescription = "Rating star",
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(20.dp))
         }
     }
 }
