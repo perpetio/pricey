@@ -40,6 +40,7 @@ import com.perpetio.pricey.ui.theme.*
 
 @Composable
 fun ListPage(
+    searchQuery: String,
     foodCategories: List<FoodCategory>,
     selectedCategory: FoodCategory,
     productArticles: List<ProductArticle>,
@@ -47,9 +48,6 @@ fun ListPage(
     onCategoryChange: (FoodCategory) -> Unit,
     onProductSelect: (ProductArticle) -> Unit,
 ) {
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
     Column(
         Modifier.background(
             color = AppColors.LightOrange
@@ -57,10 +55,7 @@ fun ListPage(
     ) {
         SearchField(
             searchQuery = searchQuery,
-            onSearchChange = { query ->
-                searchQuery = query
-                onSearchChange(query)
-            }
+            onSearchChange = onSearchChange
         )
         Text(
             stringResource(R.string.categories),

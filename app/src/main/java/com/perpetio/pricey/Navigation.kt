@@ -33,10 +33,13 @@ fun NavigationHost(
             }
             var productArticles by remember {
                 mutableStateOf(
-                    filterViewModel.searchOfProductArticles(searchQuery, selectedCategory)
+                    filterViewModel.searchOfProductArticles(
+                        searchQuery, selectedCategory
+                    )
                 )
             }
             ListPage(
+                searchQuery = searchQuery,
                 foodCategories = DataProvider.foodCategories,
                 selectedCategory = selectedCategory,
                 productArticles = productArticles,
@@ -62,11 +65,21 @@ fun NavigationHost(
             route = AppPage.ComparisonPage.name
         ) {
             val filters = Filter.values().toList()
-            var selectedFilter by remember { mutableStateOf(filters[0]) }
-            var selectedSort by remember { mutableStateOf(SortType.Descending) }
-            val productArticle by remember { filterViewModel.productArticle }
+            var selectedFilter by remember {
+                mutableStateOf(filters[0])
+            }
+            var selectedSort by remember {
+                mutableStateOf(SortType.Descending)
+            }
+            val productArticle by remember {
+                filterViewModel.productArticle
+            }
             var products by remember {
-                mutableStateOf(filterViewModel.filterProducts(selectedFilter, selectedSort))
+                mutableStateOf(
+                    filterViewModel.filterProducts(
+                        productArticle!!, selectedFilter, selectedSort
+                    )
+                )
             }
             ComparisonPage(
                 productArticle = productArticle!!,
@@ -77,11 +90,15 @@ fun NavigationHost(
                 basketProducts = basketViewModel.basketList,
                 onCheckFilter = { filter ->
                     selectedFilter = filter
-                    products = filterViewModel.filterProducts(selectedFilter, selectedSort)
+                    products = filterViewModel.filterProducts(
+                        productArticle!!, selectedFilter, selectedSort
+                    )
                 },
                 onChangeSort = { sortType ->
                     selectedSort = sortType
-                    products = filterViewModel.filterProducts(selectedFilter, selectedSort)
+                    products = filterViewModel.filterProducts(
+                        productArticle!!, selectedFilter, selectedSort
+                    )
                 },
                 onUpdateBasket = { newProducts ->
                     basketViewModel.addToBasket(newProducts)

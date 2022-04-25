@@ -67,8 +67,12 @@ fun ComparisonPage(
     onOpenFilter: () -> Unit,
     goBack: () -> Unit,
 ) {
-    var isSelectionMode by remember { mutableStateOf(false) }
-    val selectedProducts = remember { basketProducts.toMutableStateList() }
+    var isSelectionMode by remember {
+        mutableStateOf(false)
+    }
+    val selectedProducts = remember {
+        mutableStateListOf<Product>()
+    }
     Column(
         Modifier.background(
             color = AppColors.LightOrange

@@ -28,9 +28,9 @@ class FilterViewModel : ViewModel() {
     }
 
     fun filterProducts(
+        productArticle: ProductArticle,
         filter: Filter,
-        sortType: SortType,
-        productArticle: ProductArticle = this.productArticle.value!!
+        sortType: SortType
     ): List<Product> {
         val products = getProducts(productArticle.name).toMutableList()
         when (filter) {
