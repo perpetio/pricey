@@ -7,7 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +32,7 @@ fun FilterPage(
     productArticle: ProductArticle,
     priceRange: ClosedFloatingPointRange<Float>,
     priceFilter: ClosedFloatingPointRange<Float>,
-    maxRating: Int,
+    ratingValues: IntRange,
     ratingFilter: Int,
     expirationValues: List<ExpirationPeriod>,
     expirationFilter: ExpirationPeriod,
@@ -63,12 +63,12 @@ fun FilterPage(
             PriceFilter(
                 filterRange = priceFilter,
                 maxRange = priceRange,
-                onRangeChange =  onPriceRangeChange
+                onRangeChange = onPriceRangeChange
             )
             Spacer(modifier = Modifier.height(10.dp))
             RatingFilter(
                 filterValue = ratingFilter,
-                maxValue = maxRating,
+                rangeValues = ratingValues,
                 onValueChange = onRatingChange
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -176,7 +176,7 @@ private fun PriceFilter(
 @Composable
 private fun RatingFilter(
     filterValue: Int,
-    maxValue: Int,
+    rangeValues: IntRange,
     onValueChange: (Int) -> Unit
 ) {
     Column {
@@ -196,7 +196,7 @@ private fun RatingFilter(
         Spacer(modifier = Modifier.height(10.dp))
         Rating(
             selectedValue = filterValue,
-            maxValue = maxValue,
+            rangeValues = rangeValues,
             onValueChange = onValueChange
         )
     }
@@ -351,11 +351,11 @@ private fun ExpirationRange(
 @Composable
 private fun Rating(
     selectedValue: Int,
-    maxValue: Int,
+    rangeValues: IntRange,
     onValueChange: (Int) -> Unit
 ) {
     Row {
-        for (value in 1..maxValue) {
+        for (value in rangeValues) {
             IconButton(
                 modifier = Modifier.size(30.dp),
                 onClick = { onValueChange(value) }

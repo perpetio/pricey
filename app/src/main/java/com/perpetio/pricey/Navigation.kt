@@ -62,11 +62,11 @@ fun NavigationHost(
         composable(
             route = AppPage.ComparisonPage.name
         ) {
-            val filters = Filter.values().toList()
-            var selectedFilter by remember {
-                mutableStateOf(filters[0])
+            val sortValues = SortValue.values().toList()
+            var selectedSortValue by remember {
+                mutableStateOf(sortValues[0])
             }
-            var selectedSort by remember {
+            var selectedSortType by remember {
                 mutableStateOf(SortType.Descending)
             }
             val productArticle by remember {
@@ -75,27 +75,27 @@ fun NavigationHost(
             var products by remember {
                 mutableStateOf(
                     filterViewModel.filterProducts(
-                        productArticle!!, selectedFilter, selectedSort
+                        productArticle!!, selectedSortValue, selectedSortType
                     )
                 )
             }
             ComparisonPage(
                 productArticle = productArticle!!,
-                filters = filters,
-                selectedFilter = selectedFilter,
-                sortType = selectedSort,
+                sortValues = sortValues,
+                selectedSortValue = selectedSortValue,
+                selectedSortType = selectedSortType,
                 products = products,
                 basketProducts = basketViewModel.basketList,
-                onCheckFilter = { filter ->
-                    selectedFilter = filter
+                onCheckFilter = { sortValue ->
+                    selectedSortValue = sortValue
                     products = filterViewModel.filterProducts(
-                        productArticle!!, selectedFilter, selectedSort
+                        productArticle!!, selectedSortValue, selectedSortType
                     )
                 },
                 onChangeSort = { sortType ->
-                    selectedSort = sortType
+                    selectedSortType = sortType
                     products = filterViewModel.filterProducts(
-                        productArticle!!, selectedFilter, selectedSort
+                        productArticle!!, selectedSortValue, selectedSortType
                     )
                 },
                 onUpdateBasket = { newProducts ->
@@ -125,7 +125,7 @@ fun NavigationHost(
                 productArticle = filterViewModel.productArticle.value!!,
                 priceRange = filterViewModel.getPriceRange(DataProvider.products),
                 priceFilter = priceFilter,
-                maxRating = RatingStarts.max,
+                ratingValues = RatingStarts,
                 ratingFilter = ratingFilter,
                 expirationValues = ExpirationPeriod.values().toList(),
                 expirationFilter = expirationFilter,

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.ExpirationPeriod
-import com.perpetio.pricey.data.Filter
+import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.Product
@@ -50,14 +50,14 @@ class FilterViewModel : ViewModel() {
 
     fun filterProducts(
         productArticle: ProductArticle,
-        filter: Filter,
+        sortValue: SortValue,
         sortType: SortType
     ): List<Product> {
         val products = getProducts(productArticle.name).toMutableList()
-        when (filter) {
-            Filter.Price -> products.sortBy { it.price }
-            Filter.Rating -> products.sortBy { it.rating }
-            Filter.Expiration -> products.sortBy { it.expirationDate }
+        when (sortValue) {
+            SortValue.Price -> products.sortBy { it.price }
+            SortValue.Rating -> products.sortBy { it.rating }
+            SortValue.Expiration -> products.sortBy { it.expirationDate }
         }
         if (sortType == SortType.Descending) {
             products.reverse()

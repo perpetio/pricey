@@ -1,6 +1,5 @@
 package com.perpetio.pricey.ui.pages
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,9 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,13 +22,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.DataProvider
-import com.perpetio.pricey.data.Filter
 import com.perpetio.pricey.data.RatingStarts
 import com.perpetio.pricey.data.SortType
+import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.common.BackButton
@@ -35,34 +35,15 @@ import com.perpetio.pricey.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-@Composable
-private fun Preview() {
-    val filters = Filter.values().toList()
-    ComparisonPage(
-        DataProvider.productArticles[0],
-        filters,
-        filters[0],
-        SortType.Descending,
-        listOf(),
-        DataProvider.products,
-        {},
-        {},
-        {},
-        {},
-        {}
-    )
-}
-
 @Composable
 fun ComparisonPage(
     productArticle: ProductArticle,
-    filters: List<Filter>,
-    selectedFilter: Filter,
-    sortType: SortType,
+    sortValues: List<SortValue>,
+    selectedSortValue: SortValue,
+    selectedSortType: SortType,
     products: List<Product>,
     basketProducts: List<Product>,
-    onCheckFilter: (Filter) -> Unit,
+    onCheckFilter: (SortValue) -> Unit,
     onChangeSort: (SortType) -> Unit,
     onUpdateBasket: (List<Product>) -> Unit,
     onOpenFilter: () -> Unit,
@@ -89,10 +70,10 @@ fun ComparisonPage(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            FilterBar(
-                filters = filters,
-                selectedFilter = selectedFilter,
-                sortType = sortType,
+            SortBar(
+                sortValues = sortValues,
+                selectedSortValue = selectedSortValue,
+                selectedSortType = selectedSortType,
                 onCheckFilter = onCheckFilter,
                 onChangeSort = onChangeSort
             )
@@ -114,7 +95,7 @@ fun ComparisonPage(
             onProductSelect = { product ->
                 isSelectionMode = true
                 selectedProducts.apply {
-                    if(contains(product)) {
+                    if (contains(product)) {
                         remove(product)
                     } else add(product)
                 }
@@ -163,24 +144,23 @@ private fun Header(
 }
 
 @Composable
-private fun FilterBar(
-    filters: List<Filter>,
-    selectedFilter: Filter,
-    sortType: SortType,
-    onCheckFilter: (Filter) -> Unit,
+private fun SortBar(
+    sortValues: List<SortValue>,
+    selectedSortValue: SortValue,
+    selectedSortType: SortType,
+    onCheckFilter: (SortValue) -> Unit,
     onChangeSort: (SortType) -> Unit
 ) {
-    val items = remember { filters }
     LazyRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         items(
-            items = items,
-            itemContent = { filter ->
-                FilterItem(
-                    filter = filter,
-                    sortType = sortType,
-                    isSelected = (filter == selectedFilter),
+            items = sortValues,
+            itemContent = { sortValue ->
+                SortItem(
+                    sortValue = sortValue,
+                    sortType = selectedSortType,
+                    isSelected = (sortValue == selectedSortValue),
                     onCheck = onCheckFilter,
                     onChangeSort = onChangeSort
                 )
@@ -219,11 +199,11 @@ private fun FilterButton(
 }
 
 @Composable
-private fun FilterItem(
-    filter: Filter,
+private fun SortItem(
+    sortValue: SortValue,
     sortType: SortType,
     isSelected: Boolean,
-    onCheck: (Filter) -> Unit,
+    onCheck: (SortValue) -> Unit,
     onChangeSort: (SortType) -> Unit
 ) {
     Column(
@@ -235,7 +215,7 @@ private fun FilterItem(
                 onClick = {
                     if (isSelected) {
                         onChangeSort(sortType.getOpposite())
-                    } else onCheck(filter)
+                    } else onCheck(sortValue)
                 }
             )
     ) {
@@ -243,7 +223,7 @@ private fun FilterItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(filter.resId),
+                text = stringResource(sortValue.resId),
                 color = AppColors.DarkGreen
             )
             if (isSelected) {
@@ -275,7 +255,6 @@ private fun ComparisonList(
     basketProducts: List<Product>,
     onProductSelect: (Product) -> Unit,
 ) {
-    val items = remember { products }
     LazyColumn(
         modifier = Modifier.padding(horizontal = Plate.padding.dp)
     ) {
@@ -363,8 +342,8 @@ private fun ProductItem(
                 }
                 Column {
                     Rating(
-                        currentValue = product.rating,
-                        maxValue = RatingStarts.max
+                        selectedValue = product.rating,
+                        rangeValues = RatingStarts
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -400,14 +379,14 @@ private fun ProductItem(
 
 @Composable
 private fun Rating(
-    currentValue: Int,
-    maxValue: Int
+    selectedValue: Int,
+    rangeValues: IntRange
 ) {
     Row {
-        for (tmpValue in 1..maxValue) {
+        for (value in rangeValues) {
             Image(
                 painter = painterResource(
-                    if (tmpValue <= currentValue) R.drawable.ic_start
+                    if (value <= selectedValue) R.drawable.ic_start
                     else R.drawable.ic_unstart
                 ),
                 colorFilter = ColorFilter.tint(AppColors.Orange),
