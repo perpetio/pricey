@@ -1,8 +1,11 @@
 package com.perpetio.pricey.view_models
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.data.DataProvider
+import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.data.Filter
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.FoodCategory
@@ -11,6 +14,24 @@ import com.perpetio.pricey.models.ProductArticle
 
 class FilterViewModel : ViewModel() {
     val productArticle = mutableStateOf<ProductArticle?>(null)
+    var priceFilter by mutableStateOf(0f..Float.MAX_VALUE)
+    var minRatingFilter by mutableStateOf(1)
+    var expirationFilter by mutableStateOf(ExpirationPeriod.UpTo2)
+
+    fun getPriceRange(
+        products: List<Product>
+    ): ClosedFloatingPointRange<Float> {
+        var minPrice = 0.0
+        var maxPrice = minPrice
+        products.forEach { product ->
+            if (product.price < minPrice) {
+                minPrice = product.price
+            } else if (product.price > maxPrice) {
+                maxPrice = product.price
+            }
+        }
+        return minPrice.toFloat()..maxPrice.toFloat()
+    }
 
     fun searchOfProductArticles(
         partOfProductName: String,

@@ -5,9 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.perpetio.pricey.data.DataProvider
-import com.perpetio.pricey.data.Filter
-import com.perpetio.pricey.data.SortType
+import com.perpetio.pricey.data.*
 import com.perpetio.pricey.ui.pages.*
 
 @Composable
@@ -116,6 +114,12 @@ fun NavigationHost(
         ) {
             FilterPage(
                 productArticle = filterViewModel.productArticle.value!!,
+                priceRange = filterViewModel.getPriceRange(DataProvider.products),
+                priceFilter = filterViewModel.priceFilter,
+                maxRating = RatingStarts.max,
+                ratingFilter = filterViewModel.minRatingFilter,
+                expirationValues = ExpirationPeriod.values().toList(),
+                expirationFilter = filterViewModel.expirationFilter,
                 goBack = {
                     navController.popBackStack()
                 }

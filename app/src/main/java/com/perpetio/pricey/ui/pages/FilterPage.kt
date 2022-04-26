@@ -29,18 +29,15 @@ import com.perpetio.pricey.ui.theme.SpaceStyle
 import com.perpetio.pricey.ui.theme.Text
 import com.perpetio.pricey.utils.toPrice
 
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-    FilterPage(
-        DataProvider.productArticles[0],
-        {}
-    )
-}
-
 @Composable
 fun FilterPage(
     productArticle: ProductArticle,
+    priceRange: ClosedFloatingPointRange<Float>,
+    priceFilter: ClosedFloatingPointRange<Float>,
+    maxRating: Int,
+    ratingFilter: Int,
+    expirationValues: List<ExpirationPeriod>,
+    expirationFilter: ExpirationPeriod,
     goBack: () -> Unit,
 ) {
     Column(
@@ -62,17 +59,18 @@ fun FilterPage(
             )
         ) {
             PriceFilter(
-                filterRange = 7f..18f,
-                maxRange = 5f..21f
+                filterRange = priceFilter,
+                maxRange = priceRange
             )
             Spacer(modifier = Modifier.height(10.dp))
             RatingFilter(
-                filterRating = 2,
-                maxRating = 5
+                filterValue = ratingFilter,
+                maxValue = maxRating
             )
             Spacer(modifier = Modifier.height(20.dp))
             ExpirationFilter(
-                filterExpiration = ExpirationPeriod.UpTo7
+                filterValue = expirationFilter,
+                allValues = expirationValues
             )
             Spacer(modifier = Modifier.height(20.dp))
             ApplyButton(
@@ -127,7 +125,7 @@ private fun PriceFilter(
     filterRange: ClosedFloatingPointRange<Float>,
     maxRange: ClosedFloatingPointRange<Float>
 ) {
-    var sliderThumbPositions by remember { mutableStateOf(maxRange) }
+    var sliderThumbPositions by remember { mutableStateOf(filterRange) }
     Column {
         Row(
             verticalAlignment = Alignment.Bottom
@@ -157,7 +155,7 @@ private fun PriceFilter(
                 thumbColor = AppColors.Orange
             )
         )
-        Row() {
+        Row {
             Text(
                 text = "(${maxRange.start} ${stringResource(R.string.dollar)})",
                 style = Text.Style(Text.Size.Main).value
@@ -173,8 +171,8 @@ private fun PriceFilter(
 
 @Composable
 private fun RatingFilter(
-    filterRating: Int,
-    maxRating: Int
+    filterValue: Int,
+    maxValue: Int
 ) {
     Column {
         Row(
@@ -191,10 +189,10 @@ private fun RatingFilter(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        var selectedRating by remember { mutableStateOf(filterRating) }
+        var selectedRating by remember { mutableStateOf(filterValue) }
         Rating(
             selectedValue = selectedRating,
-            maxValue = maxRating,
+            maxValue = maxValue,
             onSelect = { rating ->
                 selectedRating = rating
             }
@@ -204,7 +202,8 @@ private fun RatingFilter(
 
 @Composable
 private fun ExpirationFilter(
-    filterExpiration: ExpirationPeriod
+    filterValue: ExpirationPeriod,
+    allValues: List<ExpirationPeriod>
 ) {
     Column {
         Row(
@@ -221,10 +220,9 @@ private fun ExpirationFilter(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        val periods = ExpirationPeriod.values().toList()
-        var selectedPeriod by remember { mutableStateOf(periods.first()) }
+        var selectedPeriod by remember { mutableStateOf(filterValue) }
         ExpirationRange(
-            periods = periods,
+            periods = allValues,
             selectedPeriod = selectedPeriod,
             onSelect = { period ->
                 selectedPeriod = period
