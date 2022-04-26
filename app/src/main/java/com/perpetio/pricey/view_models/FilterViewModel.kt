@@ -15,7 +15,7 @@ import com.perpetio.pricey.models.ProductArticle
 class FilterViewModel : ViewModel() {
     val productArticle = mutableStateOf<ProductArticle?>(null)
     var priceFilter by mutableStateOf(0f..Float.MAX_VALUE)
-    var minRatingFilter by mutableStateOf(1)
+    var ratingFilter by mutableStateOf(1)
     var expirationFilter by mutableStateOf(ExpirationPeriod.UpTo2)
 
     fun getPriceRange(

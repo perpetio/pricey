@@ -112,14 +112,40 @@ fun NavigationHost(
         composable(
             route = AppPage.FilterPage.name
         ) {
+            var priceFilter by remember {
+                mutableStateOf(filterViewModel.priceFilter)
+            }
+            var ratingFilter by remember {
+                mutableStateOf(filterViewModel.ratingFilter)
+            }
+            var expirationFilter by remember {
+                mutableStateOf(filterViewModel.expirationFilter)
+            }
             FilterPage(
                 productArticle = filterViewModel.productArticle.value!!,
                 priceRange = filterViewModel.getPriceRange(DataProvider.products),
-                priceFilter = filterViewModel.priceFilter,
+                priceFilter = priceFilter,
                 maxRating = RatingStarts.max,
-                ratingFilter = filterViewModel.minRatingFilter,
+                ratingFilter = ratingFilter,
                 expirationValues = ExpirationPeriod.values().toList(),
-                expirationFilter = filterViewModel.expirationFilter,
+                expirationFilter = expirationFilter,
+                onPriceRangeChange = { priceRange ->
+                    priceFilter = priceRange
+                },
+                onRatingChange = { rating ->
+                    ratingFilter = rating
+                },
+                onExpirationPeriodChange = { expirationPeriod ->
+                    expirationFilter = expirationPeriod
+                },
+                onApplyFilters = {
+                    filterViewModel.apply {
+                        this.priceFilter = priceFilter
+                        this.ratingFilter = ratingFilter
+                        this.expirationFilter = expirationFilter
+                    }
+                    navController.popBackStack()
+                },
                 goBack = {
                     navController.popBackStack()
                 }

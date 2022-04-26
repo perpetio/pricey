@@ -15,11 +15,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.common.BackButton
@@ -38,6 +36,10 @@ fun FilterPage(
     ratingFilter: Int,
     expirationValues: List<ExpirationPeriod>,
     expirationFilter: ExpirationPeriod,
+    onPriceRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
+    onRatingChange: (Int) -> Unit,
+    onExpirationPeriodChange: (ExpirationPeriod) -> Unit,
+    onApplyFilters: () -> Unit,
     goBack: () -> Unit,
 ) {
     Column(
@@ -60,21 +62,25 @@ fun FilterPage(
         ) {
             PriceFilter(
                 filterRange = priceFilter,
-                maxRange = priceRange
+                maxRange = priceRange,
+                onRangeChange =  onPriceRangeChange
             )
             Spacer(modifier = Modifier.height(10.dp))
             RatingFilter(
                 filterValue = ratingFilter,
-                maxValue = maxRating
+                maxValue = maxRating,
+                onValueChange = onRatingChange
             )
             Spacer(modifier = Modifier.height(20.dp))
             ExpirationFilter(
                 filterValue = expirationFilter,
-                allValues = expirationValues
+                allValues = expirationValues,
+                onValueChange = onExpirationPeriodChange
             )
             Spacer(modifier = Modifier.height(20.dp))
             ApplyButton(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onApplyFilters
             )
         }
     }
@@ -123,9 +129,9 @@ private fun Header(
 @Composable
 private fun PriceFilter(
     filterRange: ClosedFloatingPointRange<Float>,
-    maxRange: ClosedFloatingPointRange<Float>
+    maxRange: ClosedFloatingPointRange<Float>,
+    onRangeChange: (ClosedFloatingPointRange<Float>) -> Unit
 ) {
-    var sliderThumbPositions by remember { mutableStateOf(filterRange) }
     Column {
         Row(
             verticalAlignment = Alignment.Bottom
@@ -142,15 +148,13 @@ private fun PriceFilter(
         }
         Spacer(modifier = Modifier.height(10.dp))
         SliderLabels(
-            values = sliderThumbPositions,
+            values = filterRange,
             maxRange = maxRange
         )
         RangeSlider(
-            values = sliderThumbPositions,
+            values = filterRange,
             valueRange = maxRange,
-            onValueChange = {
-                sliderThumbPositions = it
-            },
+            onValueChange = onRangeChange,
             colors = SliderDefaults.colors(
                 thumbColor = AppColors.Orange
             )
@@ -172,7 +176,8 @@ private fun PriceFilter(
 @Composable
 private fun RatingFilter(
     filterValue: Int,
-    maxValue: Int
+    maxValue: Int,
+    onValueChange: (Int) -> Unit
 ) {
     Column {
         Row(
@@ -189,13 +194,10 @@ private fun RatingFilter(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        var selectedRating by remember { mutableStateOf(filterValue) }
         Rating(
-            selectedValue = selectedRating,
+            selectedValue = filterValue,
             maxValue = maxValue,
-            onSelect = { rating ->
-                selectedRating = rating
-            }
+            onValueChange = onValueChange
         )
     }
 }
@@ -203,7 +205,8 @@ private fun RatingFilter(
 @Composable
 private fun ExpirationFilter(
     filterValue: ExpirationPeriod,
-    allValues: List<ExpirationPeriod>
+    allValues: List<ExpirationPeriod>,
+    onValueChange: (ExpirationPeriod) -> Unit
 ) {
     Column {
         Row(
@@ -220,23 +223,21 @@ private fun ExpirationFilter(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        var selectedPeriod by remember { mutableStateOf(filterValue) }
         ExpirationRange(
             periods = allValues,
-            selectedPeriod = selectedPeriod,
-            onSelect = { period ->
-                selectedPeriod = period
-            }
+            selectedPeriod = filterValue,
+            onValueChange = onValueChange
         )
     }
 }
 
 @Composable
 private fun ApplyButton(
-    modifier: Modifier
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         shape = RoundedCornerShape(Plate.corners.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = AppColors.Orange
@@ -322,14 +323,14 @@ private fun calcFraction(
 private fun ExpirationRange(
     periods: List<ExpirationPeriod>,
     selectedPeriod: ExpirationPeriod,
-    onSelect: (ExpirationPeriod) -> Unit
+    onValueChange: (ExpirationPeriod) -> Unit
 ) {
     Row {
         periods.forEach { period ->
             Column {
                 RadioButton(
                     selected = (period == selectedPeriod),
-                    onClick = { onSelect(period) },
+                    onClick = { onValueChange(period) },
                     colors = RadioButtonDefaults.colors(
                         selectedColor = AppColors.Orange,
                         unselectedColor = AppColors.Orange
@@ -351,13 +352,13 @@ private fun ExpirationRange(
 private fun Rating(
     selectedValue: Int,
     maxValue: Int,
-    onSelect: (Int) -> Unit
+    onValueChange: (Int) -> Unit
 ) {
     Row {
         for (value in 1..maxValue) {
             IconButton(
                 modifier = Modifier.size(30.dp),
-                onClick = { onSelect(value) }
+                onClick = { onValueChange(value) }
             ) {
                 Image(
                     painter = painterResource(
