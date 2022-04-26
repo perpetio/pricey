@@ -11,4 +11,11 @@ object DateManager {
             return time
         }
     }
+
+    fun getDaysToDate(
+        date: Date
+    ): Int {
+        val diff = date.time - Date().time
+        return (diff / (24 * 60 * 60 * 1000)).toInt()
+    }
 }

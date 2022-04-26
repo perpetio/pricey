@@ -339,7 +339,7 @@ private fun ExpirationRange(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = period.rangeInDays,
+                    text = period.toString(),
                     style = Text.Style(Text.Size.Main).value
                 )
             }

@@ -72,10 +72,16 @@ fun NavigationHost(
             val productArticle by remember {
                 filterViewModel.productArticle
             }
+            val filteredList = filterViewModel.filterProducts(
+                productArticle!!,
+                filterViewModel.priceFilter,
+                filterViewModel.ratingFilter,
+                filterViewModel.expirationFilter
+            )
             var products by remember {
                 mutableStateOf(
-                    filterViewModel.filterProducts(
-                        productArticle!!, selectedSortValue, selectedSortType
+                    filterViewModel.sortProducts(
+                        filteredList, selectedSortValue, selectedSortType
                     )
                 )
             }
@@ -88,14 +94,14 @@ fun NavigationHost(
                 basketProducts = basketViewModel.basketList,
                 onCheckFilter = { sortValue ->
                     selectedSortValue = sortValue
-                    products = filterViewModel.filterProducts(
-                        productArticle!!, selectedSortValue, selectedSortType
+                    products = filterViewModel.sortProducts(
+                        products, selectedSortValue, selectedSortType
                     )
                 },
                 onChangeSort = { sortType ->
                     selectedSortType = sortType
-                    products = filterViewModel.filterProducts(
-                        productArticle!!, selectedSortValue, selectedSortType
+                    products = filterViewModel.sortProducts(
+                        products, selectedSortValue, selectedSortType
                     )
                 },
                 onUpdateBasket = { newProducts ->

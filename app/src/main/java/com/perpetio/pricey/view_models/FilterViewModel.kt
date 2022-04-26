@@ -1,5 +1,6 @@
 package com.perpetio.pricey.view_models
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,6 +12,7 @@ import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
+import com.perpetio.pricey.utils.DateManager
 
 class FilterViewModel : ViewModel() {
     val productArticle = mutableStateOf<ProductArticle?>(null)
@@ -50,19 +52,40 @@ class FilterViewModel : ViewModel() {
 
     fun filterProducts(
         productArticle: ProductArticle,
+        priceFilter: ClosedFloatingPointRange<Float>,
+        ratingFilter: Int,
+        expirationFilter: ExpirationPeriod
+    ): List<Product> {
+        val filteredList = mutableListOf<Product>()
+        getProducts(productArticle.name).forEach { product ->
+            product.apply {
+                if (price < priceFilter.start) return@apply
+                if (price > priceFilter.endInclusive) return@apply
+                if (rating < ratingFilter) return@apply
+                val days = DateManager.getDaysToDate(expirationDate)
+                Log.d("123", "diffDays: $days")
+                if (!expirationFilter.contains(days)) return@apply
+                filteredList.add(this)
+            }
+        }
+        return filteredList
+    }
+
+    fun sortProducts(
+        products: List<Product>,
         sortValue: SortValue,
         sortType: SortType
     ): List<Product> {
-        val products = getProducts(productArticle.name).toMutableList()
+        val sortedList = products.toMutableList()
         when (sortValue) {
-            SortValue.Price -> products.sortBy { it.price }
-            SortValue.Rating -> products.sortBy { it.rating }
-            SortValue.Expiration -> products.sortBy { it.expirationDate }
+            SortValue.Price -> sortedList.sortBy { it.price }
+            SortValue.Rating -> sortedList.sortBy { it.rating }
+            SortValue.Expiration -> sortedList.sortBy { it.expirationDate }
         }
         if (sortType == SortType.Descending) {
-            products.reverse()
+            sortedList.reverse()
         }
-        return products
+        return sortedList
     }
 
     private fun getProducts(
