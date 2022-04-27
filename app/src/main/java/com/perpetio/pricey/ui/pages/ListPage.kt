@@ -10,33 +10,21 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.theme.*
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun Preview() {
-//    ListPage(
-//        DataProvider.foodCategories,
-//        DataProvider.foodCategories[0],
-//        DataProvider.productArticles,
-//        {},
-//        {},
-//        {}
-//    )
-//}
+import com.perpetio.pricey.ui.theme.AppColors
+import com.perpetio.pricey.ui.theme.Dimen
+import com.perpetio.pricey.ui.theme.Text
 
 @Composable
 fun ListPage(
@@ -60,7 +48,7 @@ fun ListPage(
         Text(
             stringResource(R.string.categories),
             style = Text.Style(Text.Size.Bold, AppColors.DarkGreen).value,
-            modifier = Modifier.padding(Plate.padding.dp)
+            modifier = Modifier.padding(Dimen.Padding.main)
         )
         ListOfCategories(
             foodCategories = foodCategories,
@@ -70,7 +58,7 @@ fun ListPage(
         Text(
             text = selectedCategory.name,
             style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
-            modifier = Modifier.padding(Plate.padding.dp)
+            modifier = Modifier.padding(Dimen.Padding.main)
         )
         ListOfProducts(
             productArticles = productArticles,
@@ -85,7 +73,7 @@ private fun SearchField(
     onSearchChange: (String) -> Unit
 ) {
     Surface(
-        modifier = Modifier.padding(Plate.padding.dp),
+        modifier = Modifier.padding(Dimen.Padding.main),
         color = Color.Transparent
     ) {
         OutlinedTextField(
@@ -99,7 +87,7 @@ private fun SearchField(
                     style = Text.Style(Text.Size.Main, AppColors.Gray).value
                 )
             },
-            shape = RoundedCornerShape(Plate.corners.dp),
+            shape = RoundedCornerShape(Dimen.Corners.main),
             colors = outlinedTextFieldColors(
                 unfocusedBorderColor = AppColors.Orange,
                 focusedBorderColor = AppColors.Orange
@@ -119,7 +107,7 @@ private fun SearchIcon() {
         painter = painterResource(R.drawable.ic_search),
         tint = AppColors.Orange,
         contentDescription = "search",
-        modifier = Modifier.size(IconStyle.size.dp)
+        modifier = Modifier.size(Dimen.Size.icon)
     )
 }
 
@@ -132,8 +120,8 @@ private fun ListOfCategories(
     val items = remember { foodCategories }
     LazyRow(
         contentPadding = PaddingValues(
-            start = Plate.padding.dp,
-            bottom = Plate.padding.dp
+            start = Dimen.Space.main,
+            bottom = Dimen.Space.main
         )
     ) {
         items(
@@ -156,11 +144,11 @@ private fun CategoryItem(
     onSelect: (FoodCategory) -> Unit
 ) {
     Card(
-        border = BorderStroke(Plate.border.dp, AppColors.Orange),
+        border = BorderStroke(Dimen.Size.line, AppColors.Orange),
         backgroundColor = if (isSelected) AppColors.Orange else Color.Transparent,
-        shape = RoundedCornerShape(Plate.corners.dp),
+        shape = RoundedCornerShape(Dimen.Corners.main),
         modifier = Modifier
-            .padding(end = Plate.padding.dp)
+            .padding(end = Dimen.Space.main)
             .selectable(
                 selected = isSelected,
                 onClick = { onSelect(category) }
@@ -169,8 +157,8 @@ private fun CategoryItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(
-                horizontal = CheckedItem.paddingHorizontal.dp,
-                vertical = CheckedItem.paddingVertical.dp
+                horizontal = Dimen.Padding.main,
+                vertical = Dimen.Padding.small
             )
         ) {
             Image(
@@ -180,7 +168,7 @@ private fun CategoryItem(
                     if (isSelected) Color.White else AppColors.Orange
                 )
             )
-            Spacer(modifier = Modifier.width(IconStyle.padding.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.small))
             Text(
                 text = category.name,
                 color = if (isSelected) Color.White else AppColors.Orange
@@ -198,7 +186,7 @@ private fun ListOfProducts(
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(
-            start = Plate.padding.dp
+            start = Dimen.Space.main
         )
     ) {
         items(
@@ -221,17 +209,17 @@ private fun ProductItem(
     Card(
         modifier = Modifier
             .padding(
-                end = Plate.padding.dp,
-                bottom = Plate.padding.dp
+                end = Dimen.Padding.main,
+                bottom = Dimen.Padding.main
             )
             .clickable { onSelect(productArticle) }
             .fillMaxWidth(),
-        elevation = Plate.elevation.dp,
-        shape = RoundedCornerShape(Plate.corners.dp)
+        elevation = Dimen.Elevation.main,
+        shape = RoundedCornerShape(Dimen.Corners.main)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(Plate.padding.dp)
+            modifier = Modifier.padding(Dimen.Padding.main)
         ) {
             Image(
                 painter = painterResource(
@@ -245,7 +233,7 @@ private fun ProductItem(
             Text(
                 text = productArticle.name,
                 style = Text.Style(Text.Size.Title, AppColors.Orange).value,
-                modifier = Modifier.padding(top = Plate.padding.dp)
+                modifier = Modifier.padding(top = Dimen.Space.main)
             )
         }
     }

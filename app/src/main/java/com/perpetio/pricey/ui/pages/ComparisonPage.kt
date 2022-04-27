@@ -24,14 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
-import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.RatingStarts
 import com.perpetio.pricey.data.SortType
 import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.common.BackButton
-import com.perpetio.pricey.ui.theme.*
+import com.perpetio.pricey.ui.common.ProductHeader
+import com.perpetio.pricey.ui.theme.AppColors
+import com.perpetio.pricey.ui.theme.Dimen
+import com.perpetio.pricey.ui.theme.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,7 +61,7 @@ fun ComparisonPage(
             color = AppColors.LightOrange
         )
     ) {
-        Header(
+        ProductHeader(
             productArticle = productArticle,
             goBack = goBack
         )
@@ -105,45 +106,6 @@ fun ComparisonPage(
 }
 
 @Composable
-private fun Header(
-    productArticle: ProductArticle,
-    goBack: () -> Unit,
-) {
-    Card(
-        shape = RoundedCornerShape(
-            bottomStart = Plate.corners.dp,
-            bottomEnd = Plate.corners.dp
-        ),
-        elevation = Plate.elevation.dp
-    ) {
-        Box(
-            modifier = Modifier.padding(SpaceStyle.main.dp),
-        ) {
-            BackButton(
-                modifier = Modifier.align(Alignment.TopStart),
-                goBack = goBack
-            )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(productArticle.imageResId),
-                    modifier = Modifier
-                        .padding(bottom = SpaceStyle.main.dp)
-                        .fillMaxWidth()
-                        .height(150.dp),
-                    contentDescription = "Product image"
-                )
-                Text(
-                    text = productArticle.name,
-                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun SortBar(
     sortValues: List<SortValue>,
     selectedSortValue: SortValue,
@@ -177,9 +139,9 @@ private fun FilterButton(
 ) {
     Surface(
         color = AppColors.Orange,
-        shape = RoundedCornerShape(Plate.corners.dp),
+        shape = RoundedCornerShape(Dimen.Corners.main),
         modifier = Modifier
-            .size(ButtonStyle.size.dp)
+            .size(Dimen.Size.button)
             .clickable {
                 if (isSelectionMode) {
                     onAddToBasket()
@@ -193,7 +155,7 @@ private fun FilterButton(
             contentDescription = "Button back",
             modifier = Modifier
                 .fillMaxSize()
-                .padding(ButtonStyle.padding.dp)
+                .padding(Dimen.Padding.main)
         )
     }
 }
@@ -227,22 +189,22 @@ private fun SortItem(
                 color = AppColors.DarkGreen
             )
             if (isSelected) {
-                Spacer(modifier = Modifier.width(IconStyle.padding.dp))
+                Spacer(modifier = Modifier.width(Dimen.Space.small))
                 Image(
                     painter = painterResource(R.drawable.ic_arrow_up),
                     contentDescription = "Filer direction",
                     colorFilter = ColorFilter.tint(AppColors.DarkGreen),
                     modifier = Modifier
-                        .size(IconStyle.size.dp)
+                        .size(Dimen.Size.icon)
                         .rotate(if (sortType == SortType.Ascending) 180f else 0f)
                 )
             }
         }
         if (isSelected) {
-            Spacer(modifier = Modifier.height(IconStyle.padding.dp))
+            Spacer(modifier = Modifier.height(Dimen.Space.small))
             Divider(
                 color = AppColors.DarkGreen,
-                thickness = LineStyle.size.dp
+                thickness = Dimen.Size.lineBold
             )
         }
     }
@@ -256,7 +218,9 @@ private fun ComparisonList(
     onProductSelect: (Product) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.padding(horizontal = Plate.padding.dp)
+        modifier = Modifier.padding(
+            horizontal = Dimen.Padding.main
+        )
     ) {
         items(
             items = products,
@@ -281,13 +245,13 @@ private fun ProductItem(
 ) {
     Card(
         modifier = Modifier
-            .padding(bottom = Plate.padding.dp)
+            .padding(bottom = Dimen.Space.main)
             .clickable { onSelect(product) }
             .fillMaxWidth(),
-        elevation = Plate.elevation.dp,
-        shape = RoundedCornerShape(Plate.corners.dp),
+        elevation = Dimen.Elevation.main,
+        shape = RoundedCornerShape(Dimen.Corners.main),
         border = if (isSelected) {
-            BorderStroke(LineStyle.size.dp, AppColors.Orange)
+            BorderStroke(Dimen.Size.lineBold, AppColors.Orange)
         } else null
     ) {
         Box {
@@ -323,7 +287,7 @@ private fun ProductItem(
                         Text(
                             text = "${product.store.remoteness} ${stringResource(R.string.km)}",
                             style = Text.Style(Text.Size.Small).value,
-                            modifier = Modifier.padding(start = IconStyle.padding.dp)
+                            modifier = Modifier.padding(start = Dimen.Space.small)
                         )
                     }
                 }
@@ -357,11 +321,11 @@ private fun ProductItem(
                 Surface(
                     color = AppColors.Orange,
                     shape = RoundedCornerShape(
-                        topEnd = Plate.corners.dp,
-                        bottomStart = Plate.corners.dp
+                        topEnd = Dimen.Corners.main,
+                        bottomStart = Dimen.Corners.main
                     ),
                     modifier = Modifier
-                        .size(25.dp)
+                        .size(Dimen.Size.iconBig)
                         .align(Alignment.TopEnd)
                 ) {
                     Image(

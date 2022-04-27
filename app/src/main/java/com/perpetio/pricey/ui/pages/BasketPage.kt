@@ -8,7 +8,10 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -23,7 +26,7 @@ import com.perpetio.pricey.models.BasketProduct
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.common.BackButton
 import com.perpetio.pricey.ui.theme.AppColors
-import com.perpetio.pricey.ui.theme.SpaceStyle
+import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 
 @Composable
@@ -39,7 +42,7 @@ fun BasketPage(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(SpaceStyle.main.dp),
+                .padding(Dimen.Space.main),
         ) {
             BackButton(
                 modifier = Modifier.align(Alignment.TopStart),
@@ -70,7 +73,7 @@ private fun BasketList(
         var store: Store? = null
         var products = mutableListOf<BasketProduct>()
         basketList.sortedWith(
-            compareBy (
+            compareBy(
                 { it.store.chain.name },
                 { it.store.remoteness }
             )

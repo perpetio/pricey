@@ -20,10 +20,9 @@ import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.common.BackButton
+import com.perpetio.pricey.ui.common.ProductHeader
 import com.perpetio.pricey.ui.theme.AppColors
-import com.perpetio.pricey.ui.theme.Plate
-import com.perpetio.pricey.ui.theme.SpaceStyle
+import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 import com.perpetio.pricey.utils.toPrice
 
@@ -48,7 +47,7 @@ fun FilterPage(
             .background(AppColors.LightOrange)
             .verticalScroll(rememberScrollState())
     ) {
-        Header(
+        ProductHeader(
             productArticle = productArticle,
             goBack = goBack
         )
@@ -82,45 +81,6 @@ fun FilterPage(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onApplyFilters
             )
-        }
-    }
-}
-
-@Composable
-private fun Header(
-    productArticle: ProductArticle,
-    goBack: () -> Unit,
-) {
-    Card(
-        shape = RoundedCornerShape(
-            bottomStart = Plate.corners.dp,
-            bottomEnd = Plate.corners.dp
-        ),
-        elevation = Plate.elevation.dp
-    ) {
-        Box(
-            modifier = Modifier.padding(SpaceStyle.main.dp),
-        ) {
-            BackButton(
-                modifier = Modifier.align(Alignment.TopStart),
-                goBack = goBack
-            )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(productArticle.imageResId),
-                    modifier = Modifier
-                        .padding(bottom = SpaceStyle.main.dp)
-                        .fillMaxWidth()
-                        .height(150.dp),
-                    contentDescription = "Product image"
-                )
-                Text(
-                    text = productArticle.name,
-                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
-                )
-            }
         }
     }
 }
@@ -238,7 +198,7 @@ private fun ApplyButton(
 ) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(Plate.corners.dp),
+        shape = RoundedCornerShape(Dimen.Corners.main),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = AppColors.Orange
         )
@@ -247,7 +207,7 @@ private fun ApplyButton(
             text = stringResource(R.string.apply),
             style = Text.Style(Text.Size.Bold, Color.White).value,
             textAlign = TextAlign.Center,
-            modifier = modifier.padding(5.dp)
+            modifier = modifier.padding(Dimen.Padding.small)
         )
     }
 }

@@ -4,20 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,14 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.perpetio.pricey.ui.pages.AppPage
-import com.perpetio.pricey.ui.theme.Animation
 import com.perpetio.pricey.ui.theme.AppColors
-import com.perpetio.pricey.ui.theme.Plate
 import com.perpetio.pricey.ui.theme.PriceyTheme
 import com.perpetio.pricey.view_models.BasketViewModel
 import com.perpetio.pricey.view_models.FilterViewModel
@@ -117,7 +108,7 @@ private fun TabItem(
     onSelected: () -> Unit,
     selected: Boolean
 ) {
-    val durationMillis = if (selected) Animation.TabIcon.fadeIn else Animation.TabIcon.fadeOut
+    val durationMillis = if (selected) 150 else 100
     val animSpec = remember {
         tween<Color>(
             durationMillis = durationMillis,
