@@ -19,6 +19,7 @@ class BasketViewModel : ViewModel() {
     }
 
     fun updateBasketList(newList: List<BasketProduct>) {
+        if (newList == _basketList) return
         _basketList.clear()
         _basketList.addAll(newList)
     }

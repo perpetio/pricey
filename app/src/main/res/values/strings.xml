@@ -17,6 +17,7 @@
     <!-- Filter page -->
     <string name="min">min</string>
     <string name="days">days</string>
+    <string name="any">Any</string>
     <string name="apply">Apply</string>
 
     <!-- Basket page -->

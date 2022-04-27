@@ -1,24 +1,20 @@
 package com.perpetio.pricey.view_models
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.perpetio.pricey.data.DataProvider
 import com.perpetio.pricey.data.ExpirationPeriod
-import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.data.SortType
+import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.utils.DateManager
 
 class FilterViewModel : ViewModel() {
-    val productArticle = mutableStateOf<ProductArticle?>(null)
-    var priceFilter by mutableStateOf(0f..Float.MAX_VALUE)
-    var ratingFilter by mutableStateOf(1)
-    var expirationFilter by mutableStateOf(ExpirationPeriod.UpTo2)
+    var productArticle: ProductArticle? = null
+    var priceFilter = 0f..Float.MAX_VALUE
+    var ratingFilter = 1
+    var expirationFilter = ExpirationPeriod.Any
 
     fun getPriceRange(
         products: List<Product>
@@ -63,7 +59,6 @@ class FilterViewModel : ViewModel() {
                 if (price > priceFilter.endInclusive) return@apply
                 if (rating < ratingFilter) return@apply
                 val days = DateManager.getDaysToDate(expirationDate)
-                Log.d("123", "diffDays: $days")
                 if (!expirationFilter.contains(days)) return@apply
                 filteredList.add(this)
             }

@@ -327,7 +327,9 @@ private fun ExpirationRange(
 ) {
     Row {
         periods.forEach { period ->
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 RadioButton(
                     selected = (period == selectedPeriod),
                     onClick = { onValueChange(period) },
@@ -339,7 +341,9 @@ private fun ExpirationRange(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = period.toString(),
+                    text = if (period == ExpirationPeriod.Any) {
+                        stringResource(R.string.any)
+                    } else period.toString(),
                     style = Text.Style(Text.Size.Main).value
                 )
             }

@@ -54,7 +54,7 @@ fun NavigationHost(
                     )
                 },
                 onProductSelect = { productArticle ->
-                    filterViewModel.productArticle.value = productArticle
+                    filterViewModel.productArticle = productArticle
                     navController.navigate(AppPage.ComparisonPage.name)
                 }
             )
@@ -70,7 +70,7 @@ fun NavigationHost(
                 mutableStateOf(SortType.Descending)
             }
             val productArticle by remember {
-                filterViewModel.productArticle
+                mutableStateOf(filterViewModel.productArticle)
             }
             val filteredList = filterViewModel.filterProducts(
                 productArticle!!,
@@ -128,7 +128,7 @@ fun NavigationHost(
                 mutableStateOf(filterViewModel.expirationFilter)
             }
             FilterPage(
-                productArticle = filterViewModel.productArticle.value!!,
+                productArticle = filterViewModel.productArticle!!,
                 priceRange = filterViewModel.getPriceRange(DataProvider.products),
                 priceFilter = priceFilter,
                 ratingValues = RatingStarts,
@@ -171,7 +171,7 @@ fun NavigationHost(
                     basketList = copy
                 },
                 goBack = {
-                    basketViewModel.updateBasketList(basketList.toList())
+                    basketViewModel.updateBasketList(basketList)
                     navController.popBackStack()
                 }
             )
