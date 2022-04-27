@@ -69,7 +69,7 @@ fun ComparisonPage(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(Dimen.Space.max)
         ) {
             SortBar(
                 sortValues = sortValues,
@@ -141,7 +141,7 @@ private fun FilterButton(
         color = AppColors.Orange,
         shape = RoundedCornerShape(Dimen.Corners.main),
         modifier = Modifier
-            .size(Dimen.Size.button)
+            .size(Dimen.Size.buttonBig)
             .clickable {
                 if (isSelectionMode) {
                     onAddToBasket()
@@ -171,7 +171,7 @@ private fun SortItem(
     Column(
         modifier = Modifier
             .width(IntrinsicSize.Max)
-            .padding(end = 20.dp)
+            .padding(end = Dimen.Space.max)
             .selectable(
                 selected = isSelected,
                 onClick = {
@@ -261,8 +261,8 @@ private fun ProductItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = 20.dp,
-                        vertical = 10.dp
+                        horizontal = Dimen.Padding.max,
+                        vertical = Dimen.Padding.main
                     )
             ) {
                 Column(
@@ -272,9 +272,9 @@ private fun ProductItem(
                         painter = painterResource(product.store.chain.imageResId),
                         contentDescription = "Store chain image",
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.width(70.dp)
+                        modifier = Modifier.width(Dimen.Size.storeImage)
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(Dimen.Space.small))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -282,7 +282,7 @@ private fun ProductItem(
                             painter = painterResource(R.drawable.ic_location),
                             colorFilter = ColorFilter.tint(AppColors.Orange),
                             contentDescription = "Store chain image",
-                            modifier = Modifier.height(15.dp)
+                            modifier = Modifier.height(Dimen.Size.icon)
                         )
                         Text(
                             text = "${product.store.remoteness} ${stringResource(R.string.km)}",
@@ -298,7 +298,7 @@ private fun ProductItem(
                         text = "${product.price} ${stringResource(R.string.dollar)}",
                         style = Text.Style(Text.Size.Max, AppColors.Orange).value
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(Dimen.Space.small))
                     Text(
                         text = "(${product.amount} ${stringResource(R.string.kg)})",
                         style = Text.Style(Text.Size.Small).value
@@ -325,7 +325,7 @@ private fun ProductItem(
                         bottomStart = Dimen.Corners.main
                     ),
                     modifier = Modifier
-                        .size(Dimen.Size.iconBig)
+                        .size(Dimen.Size.marker)
                         .align(Alignment.TopEnd)
                 ) {
                     Image(
@@ -356,8 +356,8 @@ private fun Rating(
                 colorFilter = ColorFilter.tint(AppColors.Orange),
                 contentDescription = "Rating star",
                 modifier = Modifier
-                    .height(12.dp)
-                    .padding(end = 10.dp)
+                    .height(Dimen.Size.icon)
+                    .padding(end = Dimen.Space.main)
             )
         }
     }

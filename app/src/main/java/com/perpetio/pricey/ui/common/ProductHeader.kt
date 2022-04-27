@@ -42,7 +42,7 @@ fun ProductHeader(
                     modifier = Modifier
                         .padding(bottom = Dimen.Space.main)
                         .fillMaxWidth()
-                        .height(150.dp),
+                        .height(Dimen.Size.productImageBig),
                     contentDescription = "Product image"
                 )
                 Text(

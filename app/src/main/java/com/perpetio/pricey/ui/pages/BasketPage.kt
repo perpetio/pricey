@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.models.BasketProduct
 import com.perpetio.pricey.models.Store
@@ -54,7 +53,7 @@ fun BasketPage(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Dimen.Space.main))
         BasketList(
             basketList = basketList,
             onProductRemove = onProductRemove
@@ -68,7 +67,9 @@ private fun BasketList(
     onProductRemove: (BasketProduct) -> Unit
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = 20.dp)
+        contentPadding = PaddingValues(
+            horizontal = Dimen.Space.max
+        )
     ) {
         var store: Store? = null
         var products = mutableListOf<BasketProduct>()
@@ -112,9 +113,9 @@ private fun storeItem(
     var total by mutableStateOf(getTotal(products))
     scope.apply {
         item {
-            Spacer(modifier = Modifier.padding(10.dp))
+            Spacer(modifier = Modifier.padding(Dimen.Space.main))
             StoreTitle(store)
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Dimen.Space.main))
         }
         products.forEach { product ->
             var basketAmount by mutableStateOf(product.basketAmount)
@@ -130,12 +131,12 @@ private fun storeItem(
                     },
                     onProductRemove = onProductRemove
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Dimen.Space.main))
             }
         }
         item {
             TotalCost(total)
-            Spacer(modifier = Modifier.padding(10.dp))
+            Spacer(modifier = Modifier.padding(Dimen.Space.main))
         }
     }
 }
@@ -164,7 +165,7 @@ private fun StoreTitle(
                 painter = painterResource(store.chain.imageResId),
                 contentDescription = "Store chain image",
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.width(70.dp)
+                modifier = Modifier.width(Dimen.Size.storeImage)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -174,7 +175,7 @@ private fun StoreTitle(
         }
         Divider(
             color = AppColors.Gray,
-            thickness = 1.dp
+            thickness = Dimen.Size.line
         )
     }
 }
@@ -198,7 +199,7 @@ private fun ProductItem(
         )
         Spacer(modifier = Modifier.weight(10f))
         IconButton(
-            modifier = Modifier.size(30.dp),
+            modifier = Modifier.size(Dimen.Size.button),
             onClick = {
                 if (basketAmount == 0.0) {
                     onProductRemove(product)
@@ -216,7 +217,9 @@ private fun ProductItem(
                 colorFilter = ColorFilter.tint(AppColors.Orange),
                 contentDescription = "Button minus",
                 modifier = Modifier.size(
-                    if (basketAmount > 0) 15.dp else 20.dp
+                    if (basketAmount > 0) {
+                        Dimen.Size.icon
+                    } else Dimen.Size.iconBig
                 )
             )
         }
@@ -227,7 +230,7 @@ private fun ProductItem(
             modifier = Modifier.weight(30f)
         )
         IconButton(
-            modifier = Modifier.size(30.dp),
+            modifier = Modifier.size(Dimen.Size.button),
             enabled = (basketAmount < product.amount),
             onClick = {
                 if (basketAmount + deltaAmount > product.amount) {
@@ -243,7 +246,7 @@ private fun ProductItem(
                     } else AppColors.Gray
                 ),
                 contentDescription = "Button plus",
-                modifier = Modifier.size(15.dp)
+                modifier = Modifier.size(Dimen.Size.icon)
             )
         }
         Spacer(modifier = Modifier.weight(10f))
@@ -269,7 +272,7 @@ private fun TotalCost(
             text = stringResource(R.string.total),
             style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value,
         )
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(Dimen.Space.main))
         Text(
             text = "$total ${stringResource(R.string.dollar)}",
             style = Text.Style(Text.Size.Title, AppColors.Orange).value,

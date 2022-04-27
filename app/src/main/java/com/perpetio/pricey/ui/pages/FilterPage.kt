@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
@@ -53,10 +52,10 @@ fun FilterPage(
         )
         Column(
             modifier = Modifier.padding(
-                top = 10.dp,
-                bottom = 20.dp,
-                start = 20.dp,
-                end = 20.dp
+                top = Dimen.Space.main,
+                bottom = Dimen.Space.max,
+                start = Dimen.Space.max,
+                end = Dimen.Space.max
             )
         ) {
             PriceFilter(
@@ -64,19 +63,19 @@ fun FilterPage(
                 maxRange = priceRange,
                 onRangeChange = onPriceRangeChange
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Dimen.Space.main))
             RatingFilter(
                 filterValue = ratingFilter,
                 rangeValues = ratingValues,
                 onValueChange = onRatingChange
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(Dimen.Space.max))
             ExpirationFilter(
                 filterValue = expirationFilter,
                 allValues = expirationValues,
                 onValueChange = onExpirationPeriodChange
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(Dimen.Space.max))
             ApplyButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onApplyFilters
@@ -100,13 +99,13 @@ private fun PriceFilter(
                 text = stringResource(R.string.price),
                 style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(1 ${stringResource(R.string.kg)})",
                 style = Text.Style(Text.Size.Main).value
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Dimen.Space.main))
         SliderLabels(
             values = filterRange,
             maxRange = maxRange
@@ -147,13 +146,13 @@ private fun RatingFilter(
                 text = stringResource(R.string.rating),
                 style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(${stringResource(R.string.min)})",
                 style = Text.Style(Text.Size.Main).value
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Dimen.Space.main))
         Rating(
             selectedValue = filterValue,
             rangeValues = rangeValues,
@@ -176,13 +175,13 @@ private fun ExpirationFilter(
                 text = stringResource(R.string.expiration),
                 style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(${stringResource(R.string.days)})",
                 style = Text.Style(Text.Size.Main).value
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Dimen.Space.main))
         ExpirationRange(
             periods = allValues,
             selectedPeriod = filterValue,
@@ -220,7 +219,7 @@ fun SliderLabels(
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val labelMinWidth = 30.dp
+        val labelMinWidth = Dimen.Size.sliderLabel
         val firstLabelPosition = getLabelPosition(
             values.start, maxRange, labelMinWidth, maxWidth
         )
@@ -297,9 +296,9 @@ private fun ExpirationRange(
                         selectedColor = AppColors.Orange,
                         unselectedColor = AppColors.Orange
                     ),
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(Dimen.Size.button)
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(Dimen.Space.small))
                 Text(
                     text = if (period == ExpirationPeriod.Any) {
                         stringResource(R.string.any)
@@ -307,7 +306,7 @@ private fun ExpirationRange(
                     style = Text.Style(Text.Size.Main).value
                 )
             }
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.max))
         }
     }
 }
@@ -321,7 +320,7 @@ private fun Rating(
     Row {
         for (value in rangeValues) {
             IconButton(
-                modifier = Modifier.size(30.dp),
+                modifier = Modifier.size(Dimen.Size.button),
                 onClick = { onValueChange(value) }
             ) {
                 Image(
@@ -331,10 +330,10 @@ private fun Rating(
                     ),
                     colorFilter = ColorFilter.tint(AppColors.Orange),
                     contentDescription = "Rating star",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(Dimen.Size.iconBig)
                 )
             }
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(Dimen.Space.max))
         }
     }
 }

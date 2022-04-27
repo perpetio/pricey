@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.R
 import com.perpetio.pricey.ui.theme.AppColors
+import com.perpetio.pricey.ui.theme.Dimen
 
 @Composable
 fun BackButton(
@@ -21,10 +21,10 @@ fun BackButton(
     IconButton(
         modifier = modifier
             .padding(
-                start = 10.dp,
-                top = 10.dp
+                start = Dimen.Space.main,
+                top = Dimen.Space.main
             )
-            .size(30.dp),
+            .size(Dimen.Size.button),
         onClick = { goBack() }
     ) {
         Image(

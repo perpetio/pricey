@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.perpetio.pricey.ui.pages.AppPage
 import com.perpetio.pricey.ui.theme.AppColors
+import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.PriceyTheme
 import com.perpetio.pricey.view_models.BasketViewModel
 import com.perpetio.pricey.view_models.FilterViewModel
@@ -81,11 +81,11 @@ fun BottomBar(
     ) {
         Spacer(
             modifier = Modifier
-                .height(1.dp)
+                .height(Dimen.Size.line)
                 .background(AppColors.Gray)
         )
         Row(
-            modifier = Modifier.height(TabHeight),
+            modifier = Modifier.height(Dimen.Size.bottomBar),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -121,16 +121,14 @@ private fun TabItem(
     )
     IconButton(
         modifier = Modifier
-            .size(30.dp),
+            .size(Dimen.Size.button),
         onClick = { onSelected() }
     ) {
         Image(
             painter = painterResource(iconResId),
             colorFilter = ColorFilter.tint(tabTintColor),
             contentDescription = "Tab icon",
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(Dimen.Size.iconBig)
         )
     }
 }
-
-private val TabHeight = 56.dp
