@@ -69,7 +69,12 @@ private fun BasketList(
     ) {
         var store: Store? = null
         var products = mutableListOf<BasketProduct>()
-        basketList.sortedBy { it.store.chain.name }.forEach { product ->
+        basketList.sortedWith(
+            compareBy (
+                { it.store.chain.name },
+                { it.store.remoteness }
+            )
+        ).forEach { product ->
             if (store != product.store) {
                 store?.let {
                     storeItem(

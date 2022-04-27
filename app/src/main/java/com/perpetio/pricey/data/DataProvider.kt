@@ -56,13 +56,13 @@ object DataProvider {
         Product(productArticles[1], stores[5], 4,30.0, 8.0, DateManager.dateFromNow(8)),
         Product(productArticles[1], stores[7], 2,19.50, 7.0, DateManager.dateFromNow(14)),
         Product(productArticles[1], stores[8], 3,27.0, 7.0, DateManager.dateFromNow(9)),
-        Product(productArticles[1], stores[9], 4,24.50, 10.0, DateManager.dateFromNow(1)),
+        Product(productArticles[1], stores[1], 4,24.50, 10.0, DateManager.dateFromNow(1)),
 
         Product(productArticles[2], stores[5], 3,12.20, 8.0, DateManager.dateFromNow(7)),
         Product(productArticles[2], stores[7], 5,25.50, 10.0, DateManager.dateFromNow(11)),
         Product(productArticles[2], stores[3], 1,40.0, 12.0, DateManager.dateFromNow(2)),
         Product(productArticles[2], stores[2], 2,27.80, 7.0, DateManager.dateFromNow(1)),
         Product(productArticles[2], stores[1], 3,33.90, 11.0, DateManager.dateFromNow(15)),
-        Product(productArticles[2], stores[0], 4,31.50, 14.0, DateManager.dateFromNow(4)),
+        Product(productArticles[2], stores[0], 4,31.50, 14.0, DateManager.dateFromNow(4))
     )
 }
