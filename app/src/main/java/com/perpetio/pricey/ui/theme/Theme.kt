@@ -12,7 +12,7 @@ private val DarkColorPalette = darkColors(
     surface = DarkThemeColors.Plate,
     background = DarkThemeColors.Background,
     onPrimary = DarkThemeColors.Text,
-    onSecondary = CommonThemeColors.Hint,
+    onSecondary = DarkThemeColors.Hint,
     onSurface = CommonThemeColors.Icon
 )
 
@@ -22,17 +22,18 @@ private val LightColorPalette = lightColors(
     surface = LightThemeColors.Plate,
     background = LightThemeColors.Background,
     onPrimary = LightThemeColors.Text,
-    onSecondary = CommonThemeColors.Hint,
+    onSecondary = LightThemeColors.Hint,
     onSurface = CommonThemeColors.Icon
 )
 
 @Composable
-fun PriceyTheme(darkTheme: Boolean = true, content: @Composable () -> Unit) {
+fun PriceyTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+    } else LightColorPalette
 
     MaterialTheme(
         colors = colors,

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,39 +65,38 @@ private fun SearchField(
     searchQuery: String,
     onSearchChange: (String) -> Unit
 ) {
-    Surface(
-        modifier = Modifier.padding(Dimen.Padding.main),
-        color = Color.Transparent
-    ) {
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { onSearchChange(it) },
-            textStyle = Text.Style(
-                textSize = Text.Size.Main,
-                color = MaterialTheme.colors.onPrimary
-            ).value,
-            singleLine = true,
-            label = {
-                Text(
-                    text = stringResource(R.string.search),
-                    style = Text.Style(
-                        textSize = Text.Size.Main,
-                        color = MaterialTheme.colors.onSecondary
-                    ).value
-                )
-            },
-            shape = RoundedCornerShape(Dimen.Corners.main),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = MaterialTheme.colors.primary,
-                focusedBorderColor = MaterialTheme.colors.primary
-            ),
-            leadingIcon = { if (searchQuery.isEmpty()) SearchIcon() },
-            trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() },
-            modifier = Modifier
-                .background(MaterialTheme.colors.surface)
-                .fillMaxWidth(),
-        )
-    }
+    OutlinedTextField(
+        value = searchQuery,
+        onValueChange = { onSearchChange(it) },
+        textStyle = Text.Style(
+            textSize = Text.Size.Main,
+            color = MaterialTheme.colors.onPrimary
+        ).value,
+        singleLine = true,
+        label = {
+            Text(
+                text = stringResource(R.string.search),
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onSecondary
+                ).value
+            )
+        },
+        shape = RoundedCornerShape(Dimen.Corners.main),
+        colors = outlinedTextFieldColors(
+            unfocusedBorderColor = MaterialTheme.colors.primary,
+            focusedBorderColor = MaterialTheme.colors.primary
+        ),
+        leadingIcon = { if (searchQuery.isEmpty()) SearchIcon() },
+        trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() },
+        modifier = Modifier
+            .padding(Dimen.Padding.main)
+            .background(
+                color = MaterialTheme.colors.surface,
+                shape = RoundedCornerShape(Dimen.Corners.main)
+            )
+            .fillMaxWidth(),
+    )
 }
 
 @Composable
