@@ -1,7 +1,6 @@
 package com.perpetio.pricey.ui.pages
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +19,6 @@ import com.perpetio.pricey.R
 import com.perpetio.pricey.data.ExpirationPeriod
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.common.ProductHeader
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 import com.perpetio.pricey.utils.toPrice
@@ -43,7 +41,6 @@ fun FilterPage(
     Column(
         Modifier
             .fillMaxSize()
-            .background(AppColors.LightOrange)
             .verticalScroll(rememberScrollState())
     ) {
         ProductHeader(
@@ -97,12 +94,18 @@ private fun PriceFilter(
         ) {
             Text(
                 text = stringResource(R.string.price),
-                style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
+                style = Text.Style(
+                    textSize = Text.Size.Title,
+                    color = MaterialTheme.colors.secondary
+                ).value,
             )
             Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(1 ${stringResource(R.string.kg)})",
-                style = Text.Style(Text.Size.Main).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary
+                ).value
             )
         }
         Spacer(modifier = Modifier.height(Dimen.Space.main))
@@ -113,20 +116,23 @@ private fun PriceFilter(
         RangeSlider(
             values = filterRange,
             valueRange = maxRange,
-            onValueChange = onRangeChange,
-            colors = SliderDefaults.colors(
-                thumbColor = AppColors.Orange
-            )
+            onValueChange = onRangeChange
         )
         Row {
             Text(
                 text = "(${maxRange.start} ${stringResource(R.string.dollar)})",
-                style = Text.Style(Text.Size.Main).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary
+                ).value
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "(${maxRange.endInclusive} ${stringResource(R.string.dollar)})",
-                style = Text.Style(Text.Size.Main).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary
+                ).value
             )
         }
     }
@@ -144,12 +150,15 @@ private fun RatingFilter(
         ) {
             Text(
                 text = stringResource(R.string.rating),
-                style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
+                style = Text.Style(Text.Size.Title, MaterialTheme.colors.secondary).value,
             )
             Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(${stringResource(R.string.min)})",
-                style = Text.Style(Text.Size.Main).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary
+                ).value
             )
         }
         Spacer(modifier = Modifier.height(Dimen.Space.main))
@@ -173,12 +182,15 @@ private fun ExpirationFilter(
         ) {
             Text(
                 text = stringResource(R.string.expiration),
-                style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
+                style = Text.Style(Text.Size.Title, MaterialTheme.colors.secondary).value,
             )
             Spacer(modifier = Modifier.width(Dimen.Space.main))
             Text(
                 text = "(${stringResource(R.string.days)})",
-                style = Text.Style(Text.Size.Main).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary
+                ).value
             )
         }
         Spacer(modifier = Modifier.height(Dimen.Space.main))
@@ -197,14 +209,14 @@ private fun ApplyButton(
 ) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(Dimen.Corners.main),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = AppColors.Orange
-        )
+        shape = RoundedCornerShape(Dimen.Corners.main)
     ) {
         Text(
             text = stringResource(R.string.apply),
-            style = Text.Style(Text.Size.Bold, Color.White).value,
+            style = Text.Style(
+                textSize = Text.Size.Bold,
+                color = MaterialTheme.colors.background
+            ).value,
             textAlign = TextAlign.Center,
             modifier = modifier.padding(Dimen.Padding.small)
         )
@@ -251,7 +263,10 @@ private fun SliderLabel(
 ) {
     Text(
         text = "${value.toPrice()} ${stringResource(R.string.dollar)}",
-        style = Text.Style(Text.Size.Main).value,
+        style = Text.Style(
+            textSize = Text.Size.Main,
+            color = MaterialTheme.colors.onPrimary
+        ).value,
         modifier = Modifier
             .defaultMinSize(minWidth = viewMinWidth)
             .padding(start = viewPosition)
@@ -293,8 +308,8 @@ private fun ExpirationRange(
                     selected = (period == selectedPeriod),
                     onClick = { onValueChange(period) },
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = AppColors.Orange,
-                        unselectedColor = AppColors.Orange
+                        selectedColor = MaterialTheme.colors.primary,
+                        unselectedColor = MaterialTheme.colors.primary
                     ),
                     modifier = Modifier.size(Dimen.Size.button)
                 )
@@ -303,7 +318,10 @@ private fun ExpirationRange(
                     text = if (period == ExpirationPeriod.Any) {
                         stringResource(R.string.any)
                     } else period.toString(),
-                    style = Text.Style(Text.Size.Main).value
+                    style = Text.Style(
+                        textSize = Text.Size.Main,
+                        color = MaterialTheme.colors.onPrimary
+                    ).value
                 )
             }
             Spacer(modifier = Modifier.width(Dimen.Space.max))
@@ -328,7 +346,7 @@ private fun Rating(
                         if (value <= selectedValue) R.drawable.ic_start
                         else R.drawable.ic_unstart
                     ),
-                    colorFilter = ColorFilter.tint(AppColors.Orange),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                     contentDescription = "Rating star",
                     modifier = Modifier.size(Dimen.Size.iconBig)
                 )

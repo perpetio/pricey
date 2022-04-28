@@ -4,14 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 
@@ -47,7 +46,7 @@ fun ProductHeader(
                 )
                 Text(
                     text = productArticle.name,
-                    style = Text.Style(Text.Size.Max, AppColors.Orange).value
+                    style = Text.Style(Text.Size.Max, MaterialTheme.colors.primary).value
                 )
             }
         }

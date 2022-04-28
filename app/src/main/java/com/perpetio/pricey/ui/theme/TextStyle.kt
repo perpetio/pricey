@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.sp
 object Text {
     class Style(
         textSize: Size,
-        color: Color = AppColors.Black,
+        color: Color,
         fontWeight: FontWeight? = null,
     ) {
         val value = TextStyle(

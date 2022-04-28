@@ -7,9 +7,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.perpetio.pricey.ui.pages.AppPage
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.PriceyTheme
 import com.perpetio.pricey.view_models.BasketViewModel
@@ -80,9 +79,7 @@ fun BottomBar(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Spacer(
-            modifier = Modifier
-                .height(Dimen.Size.line)
-                .background(AppColors.Gray)
+            modifier = Modifier.height(Dimen.Size.line)
         )
         Row(
             modifier = Modifier.height(Dimen.Size.bottomBar),
@@ -116,7 +113,9 @@ private fun TabItem(
         )
     }
     val tabTintColor by animateColorAsState(
-        targetValue = if (selected) AppColors.Orange else AppColors.DarkGray,
+        targetValue = if (selected) {
+            MaterialTheme.colors.primary
+        } else MaterialTheme.colors.onSurface,
         animationSpec = animSpec
     )
     IconButton(

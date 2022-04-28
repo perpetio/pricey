@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import com.perpetio.pricey.R
 import com.perpetio.pricey.models.FoodCategory
 import com.perpetio.pricey.models.ProductArticle
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 
@@ -35,18 +34,14 @@ fun ListPage(
     onCategoryChange: (FoodCategory) -> Unit,
     onProductSelect: (ProductArticle) -> Unit,
 ) {
-    Column(
-        Modifier.background(
-            color = AppColors.LightOrange
-        )
-    ) {
+    Column {
         SearchField(
             searchQuery = searchQuery,
             onSearchChange = onSearchChange
         )
         Text(
             stringResource(R.string.categories),
-            style = Text.Style(Text.Size.Bold, AppColors.DarkGreen).value,
+            style = Text.Style(Text.Size.Bold, MaterialTheme.colors.secondary).value,
             modifier = Modifier.padding(Dimen.Padding.main)
         )
         ListOfCategories(
@@ -56,7 +51,7 @@ fun ListPage(
         )
         Text(
             text = selectedCategory.name,
-            style = Text.Style(Text.Size.Title, AppColors.DarkGreen).value,
+            style = Text.Style(Text.Size.Title, MaterialTheme.colors.secondary).value,
             modifier = Modifier.padding(Dimen.Padding.main)
         )
         ListOfProducts(
@@ -78,18 +73,24 @@ private fun SearchField(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { onSearchChange(it) },
-            textStyle = Text.Style(Text.Size.Main).value,
+            textStyle = Text.Style(
+                textSize = Text.Size.Main,
+                color = MaterialTheme.colors.onPrimary
+            ).value,
             singleLine = true,
             label = {
                 Text(
                     text = stringResource(R.string.search),
-                    style = Text.Style(Text.Size.Main, AppColors.Gray).value
+                    style = Text.Style(
+                        textSize = Text.Size.Main,
+                        color = MaterialTheme.colors.onSecondary
+                    ).value
                 )
             },
             shape = RoundedCornerShape(Dimen.Corners.main),
             colors = outlinedTextFieldColors(
-                unfocusedBorderColor = AppColors.Orange,
-                focusedBorderColor = AppColors.Orange
+                unfocusedBorderColor = MaterialTheme.colors.primary,
+                focusedBorderColor = MaterialTheme.colors.primary
             ),
             leadingIcon = { if (searchQuery.isEmpty()) SearchIcon() },
             trailingIcon = { if (searchQuery.isNotEmpty()) SearchIcon() },
@@ -104,7 +105,7 @@ private fun SearchField(
 private fun SearchIcon() {
     Icon(
         painter = painterResource(R.drawable.ic_search),
-        tint = AppColors.Orange,
+        tint = MaterialTheme.colors.primary,
         contentDescription = "search",
         modifier = Modifier.size(Dimen.Size.icon)
     )
@@ -143,8 +144,10 @@ private fun CategoryItem(
     onSelect: (FoodCategory) -> Unit
 ) {
     Card(
-        border = BorderStroke(Dimen.Size.line, AppColors.Orange),
-        backgroundColor = if (isSelected) AppColors.Orange else Color.Transparent,
+        border = BorderStroke(Dimen.Size.line, MaterialTheme.colors.primary),
+        backgroundColor = if (isSelected) {
+            MaterialTheme.colors.primary
+        } else MaterialTheme.colors.background,
         shape = RoundedCornerShape(Dimen.Corners.main),
         modifier = Modifier
             .padding(end = Dimen.Space.main)
@@ -164,13 +167,17 @@ private fun CategoryItem(
                 painter = painterResource(category.imageResId),
                 contentDescription = "Category image",
                 colorFilter = ColorFilter.tint(
-                    if (isSelected) Color.White else AppColors.Orange
+                    if (isSelected) {
+                        MaterialTheme.colors.background
+                    } else MaterialTheme.colors.primary
                 )
             )
             Spacer(modifier = Modifier.width(Dimen.Space.small))
             Text(
                 text = category.name,
-                color = if (isSelected) Color.White else AppColors.Orange
+                color = if (isSelected) {
+                    MaterialTheme.colors.background
+                } else MaterialTheme.colors.primary
             )
         }
     }
@@ -221,9 +228,7 @@ private fun ProductItem(
             modifier = Modifier.padding(Dimen.Padding.main)
         ) {
             Image(
-                painter = painterResource(
-                    productArticle.imageResId ?: productArticle.foodCategory.imageResId
-                ),
+                painter = painterResource(productArticle.imageResId),
                 contentDescription = "Product image",
                 modifier = Modifier
                     .height(Dimen.Size.productImage)
@@ -231,7 +236,7 @@ private fun ProductItem(
             )
             Text(
                 text = productArticle.name,
-                style = Text.Style(Text.Size.Title, AppColors.Orange).value,
+                style = Text.Style(Text.Size.Title, MaterialTheme.colors.primary).value,
                 modifier = Modifier.padding(top = Dimen.Space.main)
             )
         }

@@ -1,12 +1,12 @@
 package com.perpetio.pricey.ui.pages
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +24,6 @@ import com.perpetio.pricey.R
 import com.perpetio.pricey.models.BasketProduct
 import com.perpetio.pricey.models.Store
 import com.perpetio.pricey.ui.common.BackButton
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 
@@ -34,10 +33,7 @@ fun BasketPage(
     onProductRemove: (BasketProduct) -> Unit,
     goBack: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .background(AppColors.LightOrange)
-    ) {
+    Column {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -49,7 +45,7 @@ fun BasketPage(
             )
             Text(
                 text = stringResource(R.string.cart),
-                style = Text.Style(Text.Size.Max, AppColors.Orange).value,
+                style = Text.Style(Text.Size.Max, MaterialTheme.colors.primary).value,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
@@ -170,11 +166,15 @@ private fun StoreTitle(
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${store.remoteness} ${stringResource(R.string.km)}",
-                style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value
+                style = Text.Style(
+                    textSize = Text.Size.Main,
+                    color = MaterialTheme.colors.onPrimary,
+                    fontWeight = FontWeight.ExtraBold
+                ).value
             )
         }
         Divider(
-            color = AppColors.Gray,
+            color = MaterialTheme.colors.onSecondary,
             thickness = Dimen.Size.line
         )
     }
@@ -194,7 +194,10 @@ private fun ProductItem(
     ) {
         Text(
             text = product.article.name,
-            style = Text.Style(Text.Size.Bold).value,
+            style = Text.Style(
+                textSize = Text.Size.Bold,
+                color = MaterialTheme.colors.onPrimary
+            ).value,
             modifier = Modifier.weight(25f)
         )
         Spacer(modifier = Modifier.weight(10f))
@@ -214,7 +217,7 @@ private fun ProductItem(
                         R.drawable.ic_minus
                     } else R.drawable.ic_delete
                 ),
-                colorFilter = ColorFilter.tint(AppColors.Orange),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 contentDescription = "Button minus",
                 modifier = Modifier.size(
                     if (basketAmount > 0) {
@@ -225,7 +228,10 @@ private fun ProductItem(
         }
         Text(
             text = "$basketAmount ${stringResource(R.string.kg)}",
-            style = Text.Style(Text.Size.Bold).value,
+            style = Text.Style(
+                textSize = Text.Size.Bold,
+                color = MaterialTheme.colors.onPrimary
+            ).value,
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(30f)
         )
@@ -242,8 +248,8 @@ private fun ProductItem(
                 painter = painterResource(R.drawable.ic_plus),
                 colorFilter = ColorFilter.tint(
                     if (basketAmount < product.amount) {
-                        AppColors.Orange
-                    } else AppColors.Gray
+                        MaterialTheme.colors.primary
+                    } else MaterialTheme.colors.onSecondary
                 ),
                 contentDescription = "Button plus",
                 modifier = Modifier.size(Dimen.Size.icon)
@@ -252,7 +258,7 @@ private fun ProductItem(
         Spacer(modifier = Modifier.weight(10f))
         Text(
             text = "${basketAmount * product.price} ${stringResource(R.string.dollar)}",
-            style = Text.Style(Text.Size.Bold, AppColors.Orange).value,
+            style = Text.Style(Text.Size.Bold, MaterialTheme.colors.primary).value,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(25f)
         )
@@ -270,12 +276,16 @@ private fun TotalCost(
     ) {
         Text(
             text = stringResource(R.string.total),
-            style = Text.Style(Text.Size.Main, fontWeight = FontWeight.ExtraBold).value,
+            style = Text.Style(
+                textSize = Text.Size.Main,
+                color = MaterialTheme.colors.onPrimary,
+                fontWeight = FontWeight.ExtraBold
+            ).value,
         )
         Spacer(modifier = Modifier.width(Dimen.Space.main))
         Text(
             text = "$total ${stringResource(R.string.dollar)}",
-            style = Text.Style(Text.Size.Title, AppColors.Orange).value,
+            style = Text.Style(Text.Size.Title, MaterialTheme.colors.primary).value,
         )
     }
 }

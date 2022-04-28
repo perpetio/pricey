@@ -2,7 +2,6 @@ package com.perpetio.pricey.ui.pages
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,10 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +26,6 @@ import com.perpetio.pricey.data.SortValue
 import com.perpetio.pricey.models.Product
 import com.perpetio.pricey.models.ProductArticle
 import com.perpetio.pricey.ui.common.ProductHeader
-import com.perpetio.pricey.ui.theme.AppColors
 import com.perpetio.pricey.ui.theme.Dimen
 import com.perpetio.pricey.ui.theme.Text
 import java.text.SimpleDateFormat
@@ -56,11 +51,7 @@ fun ComparisonPage(
     val selectedProducts = remember {
         mutableStateListOf<Product>()
     }
-    Column(
-        Modifier.background(
-            color = AppColors.LightOrange
-        )
-    ) {
+    Column {
         ProductHeader(
             productArticle = productArticle,
             goBack = goBack
@@ -138,7 +129,7 @@ private fun FilterButton(
     onAddToBasket: () -> Unit,
 ) {
     Surface(
-        color = AppColors.Orange,
+        color = MaterialTheme.colors.primary,
         shape = RoundedCornerShape(Dimen.Corners.main),
         modifier = Modifier
             .size(Dimen.Size.buttonBig)
@@ -150,7 +141,12 @@ private fun FilterButton(
     ) {
         Image(
             painter = painterResource(
-                if (isSelectionMode) R.drawable.ic_basket else R.drawable.ic_filter
+                if (isSelectionMode) {
+                    R.drawable.ic_basket
+                } else R.drawable.ic_filter
+            ),
+            colorFilter = ColorFilter.tint(
+                MaterialTheme.colors.background
             ),
             contentDescription = "Button back",
             modifier = Modifier
@@ -186,14 +182,14 @@ private fun SortItem(
         ) {
             Text(
                 text = stringResource(sortValue.resId),
-                color = AppColors.DarkGreen
+                color = MaterialTheme.colors.secondary
             )
             if (isSelected) {
                 Spacer(modifier = Modifier.width(Dimen.Space.small))
                 Image(
                     painter = painterResource(R.drawable.ic_arrow_up),
                     contentDescription = "Filer direction",
-                    colorFilter = ColorFilter.tint(AppColors.DarkGreen),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
                     modifier = Modifier
                         .size(Dimen.Size.icon)
                         .rotate(if (sortType == SortType.Ascending) 180f else 0f)
@@ -203,7 +199,7 @@ private fun SortItem(
         if (isSelected) {
             Spacer(modifier = Modifier.height(Dimen.Space.small))
             Divider(
-                color = AppColors.DarkGreen,
+                color = MaterialTheme.colors.secondary,
                 thickness = Dimen.Size.lineBold
             )
         }
@@ -251,7 +247,7 @@ private fun ProductItem(
         elevation = Dimen.Elevation.main,
         shape = RoundedCornerShape(Dimen.Corners.main),
         border = if (isSelected) {
-            BorderStroke(Dimen.Size.lineBold, AppColors.Orange)
+            BorderStroke(Dimen.Size.lineBold, MaterialTheme.colors.primary)
         } else null
     ) {
         Box {
@@ -280,13 +276,16 @@ private fun ProductItem(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_location),
-                            colorFilter = ColorFilter.tint(AppColors.Orange),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                             contentDescription = "Store chain image",
                             modifier = Modifier.height(Dimen.Size.icon)
                         )
                         Text(
                             text = "${product.store.remoteness} ${stringResource(R.string.km)}",
-                            style = Text.Style(Text.Size.Small).value,
+                            style = Text.Style(
+                                textSize = Text.Size.Small,
+                                color = MaterialTheme.colors.onPrimary
+                            ).value,
                             modifier = Modifier.padding(start = Dimen.Space.small)
                         )
                     }
@@ -296,12 +295,15 @@ private fun ProductItem(
                 ) {
                     Text(
                         text = "${product.price} ${stringResource(R.string.dollar)}",
-                        style = Text.Style(Text.Size.Max, AppColors.Orange).value
+                        style = Text.Style(Text.Size.Max, MaterialTheme.colors.primary).value
                     )
                     Spacer(modifier = Modifier.height(Dimen.Space.small))
                     Text(
                         text = "(${product.amount} ${stringResource(R.string.kg)})",
-                        style = Text.Style(Text.Size.Small).value
+                        style = Text.Style(
+                            textSize = Text.Size.Small,
+                            color = MaterialTheme.colors.onPrimary
+                        ).value
                     )
                 }
                 Column {
@@ -313,13 +315,16 @@ private fun ProductItem(
                     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     Text(
                         text = "Exp: ${dateFormat.format(product.expirationDate)}",
-                        style = Text.Style(Text.Size.Small).value
+                        style = Text.Style(
+                            textSize = Text.Size.Small,
+                            color = MaterialTheme.colors.onPrimary
+                        ).value
                     )
                 }
             }
             if (isInBasket) {
                 Surface(
-                    color = AppColors.Orange,
+                    color = MaterialTheme.colors.primary,
                     shape = RoundedCornerShape(
                         topEnd = Dimen.Corners.main,
                         bottomStart = Dimen.Corners.main
@@ -330,6 +335,7 @@ private fun ProductItem(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_basket),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.surface),
                         contentDescription = "Basket mark",
                         modifier = Modifier
                             .fillMaxSize()
@@ -353,7 +359,7 @@ private fun Rating(
                     if (value <= selectedValue) R.drawable.ic_start
                     else R.drawable.ic_unstart
                 ),
-                colorFilter = ColorFilter.tint(AppColors.Orange),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                 contentDescription = "Rating star",
                 modifier = Modifier
                     .height(Dimen.Size.icon)
