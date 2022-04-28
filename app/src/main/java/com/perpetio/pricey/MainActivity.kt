@@ -7,14 +7,10 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,9 +28,24 @@ import com.perpetio.pricey.view_models.NavigationHost
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val filterViewModel = FilterViewModel()
+        val basketViewModel = BasketViewModel()
         setContent {
-            PriceyTheme {
-                AppUi()
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+            var isDarkTheme by remember {
+                mutableStateOf(isSystemInDarkTheme)
+            }
+            PriceyTheme(
+                isDarkTheme
+            ) {
+                AppUi(
+                    filterViewModel,
+                    basketViewModel,
+                    isDarkTheme,
+                    onThemeChange = { isDark ->
+                        isDarkTheme = isDark
+                    }
+                )
             }
         }
     }
@@ -42,8 +53,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun AppUi(
-    filterViewModel: FilterViewModel = FilterViewModel(),
-    basketViewModel: BasketViewModel = BasketViewModel()
+    filterViewModel: FilterViewModel,
+    basketViewModel: BasketViewModel,
+    isDarkTheme: Boolean,
+    onThemeChange: (isDarkTheme: Boolean) -> Unit,
 ) {
     val navController = rememberNavController()
     val backstackEntry = navController.currentBackStackEntryAsState()
@@ -53,10 +66,12 @@ private fun AppUi(
         bottomBar = {
             BottomBar(
                 allPages = AppPage.values().toList(),
+                currentPage = currentPage,
                 onTabSelected = { page ->
                     navController.navigate(page.name)
                 },
-                currentPage = currentPage
+                isDarkTheme = isDarkTheme,
+                onThemeChange = onThemeChange
             )
         }
     ) { innerPadding ->
@@ -72,8 +87,10 @@ private fun AppUi(
 @Composable
 fun BottomBar(
     allPages: List<AppPage>,
+    currentPage: AppPage,
     onTabSelected: (AppPage) -> Unit,
-    currentPage: AppPage
+    isDarkTheme: Boolean,
+    onThemeChange: (isDarkTheme: Boolean) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -86,6 +103,10 @@ fun BottomBar(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = onThemeChange
+            )
             allPages.forEach { page ->
                 page.iconResId?.let { iconResId ->
                     TabItem(
