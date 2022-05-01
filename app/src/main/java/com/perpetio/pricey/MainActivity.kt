@@ -3,6 +3,7 @@ package com.perpetio.pricey
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -11,6 +12,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +30,11 @@ import com.perpetio.pricey.view_models.NavigationHost
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val filterViewModel = FilterViewModel()
-        val basketViewModel = BasketViewModel()
+        val filterViewModel by viewModels<FilterViewModel>()
+        val basketViewModel by viewModels<BasketViewModel>()
         setContent {
             val isSystemInDarkTheme = isSystemInDarkTheme()
-            var isDarkTheme by remember {
+            var isDarkTheme by rememberSaveable {
                 mutableStateOf(isSystemInDarkTheme)
             }
             PriceyTheme(
