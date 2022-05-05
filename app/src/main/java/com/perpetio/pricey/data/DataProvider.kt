@@ -40,7 +40,17 @@ object DataProvider {
         ProductArticle(foodCategories[0], "Orange", R.drawable.fruit_orange, "kg"),
         ProductArticle(foodCategories[0], "Kiwi", R.drawable.fruit_kiwi, "kg"),
         ProductArticle(foodCategories[0], "Pomegranate", R.drawable.fruir_pomegranate, "kg"),
-        ProductArticle(foodCategories[0], "Pear", R.drawable.fruit_pear, "kg")
+        ProductArticle(foodCategories[0], "Pear", R.drawable.fruit_pear, "kg"),
+
+        ProductArticle(foodCategories[1], "Tomato", R.drawable.vegetable_tomatoes, "kg"),
+        ProductArticle(foodCategories[1], "Broccoli", R.drawable.vegetable_broccoli, "kg"),
+        ProductArticle(foodCategories[1], "Cucumber", R.drawable.vegetable_cucumber, "kg"),
+        ProductArticle(foodCategories[1], "Paprika", R.drawable.vegetable_paprika, "kg"),
+
+        ProductArticle(foodCategories[2], "Bread", R.drawable.bakery_bread, "pc"),
+        ProductArticle(foodCategories[2], "Toaster Bread", R.drawable.bakery_toaster_bread, "pc"),
+        ProductArticle(foodCategories[2], "Roll", R.drawable.bakery_roll, "pc"),
+        ProductArticle(foodCategories[2], "Croissant", R.drawable.bakery_croissant, "pc"),
     )
 
     val products = listOf(
