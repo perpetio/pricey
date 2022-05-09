@@ -7,9 +7,7 @@ E-commerce app written with Jetpack Compose
     <img src="assets/list_page.jpg" width='200'/>
     <img src="assets/comparison_page.jpg" width='200'/>
     <img src="assets/filter_page.jpg" width='200'/>
-    <img src="assets/comparison_page_selection.jpg" width='200'/>
     <img src="assets/basket_page.jpg" width='200'/>
-    <img src="assets/list_page_dark.jpg" width='200'/>
 </p>
 
 ## Features include:
@@ -19,7 +17,10 @@ E-commerce app written with Jetpack Compose
 * make a basket list
 * dark theme support
 
-## Used libraries :
+## Dark theme
+<img src="assets/dark_theme.gif" width='200'/>
+
+## Used libraries:
 * [Navigation Component](https://developer.android.com/jetpack/compose/navigation) - provides navigation between composables while taking advantage of the Navigation component’s infrastructure and features.
 * [System UI Controller](https://google.github.io/accompanist/systemuicontroller/) - provides easy-to-use utilities for updating the System UI bar colors within Jetpack Compose.
 
