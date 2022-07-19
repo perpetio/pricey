@@ -4,10 +4,10 @@ E-commerce app written with Jetpack Compose
 
 ## Preview
 <p align="center">
-    <img src="assets/list_page.jpg" width='200'/>
-    <img src="assets/comparison_page.jpg" width='200'/>
-    <img src="assets/filter_page.jpg" width='200'/>
-    <img src="assets/basket_page.jpg" width='200'/>
+    <img src="assets/list_page.jpg" width='170'/>
+    <img src="assets/comparison_page.jpg" width='170'/>
+    <img src="assets/filter_page.jpg" width='170'/>
+    <img src="assets/basket_page.jpg" width='170'/>
 </p>
 
 ## Features include:
