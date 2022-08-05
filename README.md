@@ -2,6 +2,10 @@
 
 E-commerce app written with Jetpack Compose
 
+## See our tutorial posts:
+
+[How to Make an Android E-commerce Price Comparison App From Scratch](https://perpet.io/blog/how-to-make-an-android-e-commerce-price-comparison-app-from-scratch/)
+
 ## Preview
 <p align="center">
     <img src="assets/list_page.jpg" width='170'/>
